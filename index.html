@@ -2,110 +2,643 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>最新記事</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>最新記事 | Boat RSS</title>
+  <meta name="description" content="RSSから自動収集した最新記事。気になる話題をサクッとチェック。" />
+  <meta name="theme-color" content="#0b1220" />
   <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans JP",sans-serif;margin:0;background:#fff;color:#111}
-    header{padding:22px 18px 10px}
-    h1{margin:0;font-size:46px;letter-spacing:.02em}
-    .bar{display:flex;gap:12px;align-items:center;margin-top:10px}
-    .muted{color:#666}
-    button{border:1px solid #ddd;background:#fff;border-radius:14px;padding:10px 14px;font-size:14px}
-    main{padding:10px 14px 40px}
-    .card{border:1px solid #eee;border-radius:18px;padding:16px 16px;margin:14px 0;background:#fff}
-    .title{font-size:22px;font-weight:800;line-height:1.25;margin:0 0 10px}
-    .title a{color:#0a58ff;text-decoration:none}
-    .title a:hover{text-decoration:underline}
-    .meta{display:flex;gap:10px;align-items:center;color:#666;font-size:13px}
-    .meta a{color:#666;text-decoration:underline}
-    .error{color:#b00020}
-  </style>
-</head>
-<body>
-  <header>
-    <h1>最新記事</h1>
-    <div class="bar">
-      <div id="status" class="muted">読み込み中...</div>
-      <button id="reload">再読み込み</button>
-    </div>
-  </header>
-
-  <main id="list"></main>
-
-  <script>
-    const $status = document.getElementById("status");
-    const $list = document.getElementById("list");
-    document.getElementById("reload").addEventListener("click", () => load());
-
-    function fmtJST(iso){
-      try{
-        const d = new Date(iso);
-        const y = d.getFullYear();
-        const m = String(d.getMonth()+1).padStart(2,"0");
-        const day = String(d.getDate()).padStart(2,"0");
-        const hh = String(d.getHours()).padStart(2,"0");
-        const mm = String(d.getMinutes()).padStart(2,"0");
-        const ss = String(d.getSeconds()).padStart(2,"0");
-        return `${y}/${m}/${day} ${hh}:${mm}:${ss}`;
-      }catch(e){ return iso; }
+    :root{
+      --bg: #0b1220;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.10);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.66);
+      --muted2: rgba(255,255,255,.50);
+      --line: rgba(255,255,255,.10);
+      --accent: #7c3aed;
+      --accent2:#22c55e;
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+      --radius2: 26px;
+      --max: 980px;
+      --chip: rgba(255,255,255,.08);
     }
 
-    async function load(){
-      $status.classList.remove("error");
-      $status.textContent = "読み込み中...";
-      $list.innerHTML = "";
-
-      // cache回避（GitHub Pagesのキャッシュで古いposts.json掴むのを防ぐ）
-      const url = `./posts.json?ts=${Date.now()}`;
-
-      try{
-        const res = await fetch(url, { cache: "no-store" });
-        if(!res.ok) throw new Error(`HTTP ${res.status}`);
-        const posts = await res.json();
-
-        if(!Array.isArray(posts) || posts.length === 0){
-          $status.textContent = "記事なし（posts.jsonが空）";
-          return;
-        }
-
-        $status.textContent = `表示中: ${posts.length}件`;
-
-        for(const post of posts){
-          const card = document.createElement("div");
-          card.className = "card";
-
-          const h = document.createElement("h2");
-          h.className = "title";
-
-          const a = document.createElement("a");
-          // ✅ ここが肝：外部ではなく /posts/ のHTMLへ飛ばす
-          a.href = post.link;       // 例: /posts/1768....html
-          a.textContent = post.title || "(no title)";
-          a.target = "_self";
-          a.rel = "noopener";
-
-          h.appendChild(a);
-
-          const meta = document.createElement("div");
-          meta.className = "meta";
-          meta.innerHTML = `
-            <span>${fmtJST(post.date)}</span>
-            ${post.sourceUrl ? `<span>｜</span><a href="${post.sourceUrl}" target="_blank" rel="noopener">元記事</a>` : ""}
-          `;
-
-          card.appendChild(h);
-          card.appendChild(meta);
-          $list.appendChild(card);
-        }
-
-      }catch(err){
-        $status.classList.add("error");
-        $status.textContent = `読み込み失敗: ${String(err.message || err)}`;
-        $list.innerHTML = `<div class="muted">posts.json が見つからないか、壊れています</div>`;
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg: #f6f7fb;
+        --panel: rgba(0,0,0,.04);
+        --panel2: rgba(0,0,0,.06);
+        --text: rgba(0,0,0,.88);
+        --muted: rgba(0,0,0,.62);
+        --muted2: rgba(0,0,0,.48);
+        --line: rgba(0,0,0,.10);
+        --shadow: 0 12px 40px rgba(0,0,0,.10);
+        --chip: rgba(0,0,0,.05);
       }
     }
 
-    load();
-  </script>
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", "Hiragino Sans", "Yu Gothic", "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(124,58,237,.35), transparent 60%),
+        radial-gradient(900px 500px at 90% 10%, rgba(34,197,94,.18), transparent 60%),
+        radial-gradient(900px 600px at 50% 110%, rgba(59,130,246,.18), transparent 60%),
+        var(--bg);
+    }
+
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:var(--max); margin:0 auto; padding:24px 14px 60px}
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      margin-top:8px;
+    }
+
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      padding:14px 16px;
+      background:linear-gradient(180deg, var(--panel2), var(--panel));
+      border:1px solid var(--line);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+    }
+    .logo{
+      width:44px; height:44px; border-radius:14px;
+      background:
+        radial-gradient(14px 14px at 30% 30%, rgba(255,255,255,.9), transparent 60%),
+        linear-gradient(135deg, rgba(124,58,237,.9), rgba(34,197,94,.7));
+      display:grid; place-items:center;
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .logo svg{opacity:.95}
+    .brand h1{
+      font-size:22px; line-height:1.1; margin:0;
+      letter-spacing:.02em;
+    }
+    .brand p{margin:2px 0 0; font-size:12px; color:var(--muted)}
+    .actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+    .btn{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:12px 14px;
+      background:linear-gradient(180deg, var(--panel2), var(--panel));
+      border:1px solid var(--line);
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+      cursor:pointer;
+      user-select:none;
+      font-size:14px;
+      color:var(--text);
+    }
+    .btn:active{transform: translateY(1px)}
+    .btn .dot{width:8px; height:8px; border-radius:999px; background: var(--accent2)}
+    .btn.secondary .dot{background: var(--accent)}
+    .btn small{color:var(--muted); font-size:12px}
+
+    .hero{
+      margin-top:16px;
+      padding:18px 16px;
+      border-radius: var(--radius2);
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(500px 220px at 10% 0%, rgba(124,58,237,.25), transparent 60%),
+        radial-gradient(420px 220px at 90% 0%, rgba(34,197,94,.16), transparent 60%);
+      pointer-events:none;
+      filter: blur(2px);
+    }
+    .hero > *{position:relative}
+    .heroRow{
+      display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+    }
+
+    .search{
+      flex: 1 1 360px;
+      display:flex; gap:10px; align-items:center;
+      padding:12px 14px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.10);
+      backdrop-filter: blur(10px);
+    }
+    @media (prefers-color-scheme: light){
+      .search{background: rgba(255,255,255,.65)}
+    }
+    .search input{
+      width:100%;
+      border:none;
+      outline:none;
+      background:transparent;
+      font-size:15px;
+      color:var(--text);
+    }
+    .search input::placeholder{color:var(--muted2)}
+    .chips{display:flex; gap:8px; flex-wrap:wrap}
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      background: var(--chip);
+      cursor:pointer;
+      font-size:13px;
+      color:var(--text);
+      user-select:none;
+    }
+    .chip[aria-pressed="true"]{
+      border-color: rgba(124,58,237,.55);
+      box-shadow: 0 0 0 3px rgba(124,58,237,.18);
+    }
+    .chip .mini{font-size:12px; color:var(--muted)}
+    .metaLine{
+      margin-top:10px;
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .grid{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+    }
+
+    @media (min-width: 720px){
+      .grid{grid-template-columns: 1fr 1fr}
+    }
+
+    .card{
+      border-radius: var(--radius2);
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, var(--panel2), var(--panel));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+      transition: transform .12s ease, border-color .12s ease;
+    }
+    .card:hover{transform: translateY(-2px); border-color: rgba(124,58,237,.35)}
+    .thumb{
+      width:100%;
+      aspect-ratio: 16/9;
+      background: #111827;
+      display:block;
+    }
+    .cardBody{
+      padding:14px 14px 12px;
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .title{
+      margin:0;
+      font-size:16px;
+      line-height:1.35;
+      letter-spacing:.01em;
+      display:-webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow:hidden;
+    }
+    .subRow{
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      color:var(--muted);
+      font-size:12.5px;
+    }
+    .src{
+      display:inline-flex; align-items:center; gap:8px;
+      min-width:0;
+    }
+    .src span{
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width: 220px;
+    }
+    .badge{
+      font-size:12px;
+      padding:6px 10px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.10);
+    }
+    @media (prefers-color-scheme: light){
+      .badge{background: rgba(255,255,255,.7)}
+    }
+    .empty{
+      margin-top:16px;
+      padding:18px 16px;
+      border-radius: var(--radius2);
+      border:1px dashed var(--line);
+      color:var(--muted);
+      text-align:center;
+      background: rgba(0,0,0,.08);
+    }
+    @media (prefers-color-scheme: light){
+      .empty{background: rgba(255,255,255,.65)}
+    }
+    .footer{
+      margin-top:18px;
+      display:flex; justify-content:center;
+    }
+    .loadMore{
+      padding:12px 16px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, var(--panel2), var(--panel));
+      box-shadow: var(--shadow);
+      cursor:pointer;
+      font-size:14px;
+      color:var(--text);
+    }
+    .loadMore:disabled{opacity:.55; cursor:not-allowed}
+    .smallNote{
+      margin-top:10px;
+      text-align:center;
+      color:var(--muted2);
+      font-size:12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M4 17c4 0 6-2 8-6s4-6 8-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            <path d="M5 20c3 0 5-1.2 6.8-4" stroke="white" stroke-opacity=".85" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <h1>最新記事</h1>
+          <p>RSSから自動収集（読み取り用ページ）</p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="reloadBtn" type="button" title="最新のposts.jsonを読み直す">
+          <span class="dot" aria-hidden="true"></span>
+          再読み込み
+          <small id="countMini">—</small>
+        </button>
+        <a class="btn secondary" href="https://github.com/" target="_blank" rel="noopener">
+          <span class="dot" aria-hidden="true"></span>
+          GitHub
+          <small>編集</small>
+        </a>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="heroRow">
+        <div class="search" role="search">
+          <span aria-hidden="true">🔎</span>
+          <input id="q" type="search" placeholder="キーワード検索（例：G1、芦屋、住之江、峰…）" autocomplete="off" />
+        </div>
+
+        <div class="chips" aria-label="フィルタ">
+          <button class="chip" id="chipToday" type="button" aria-pressed="false">
+            今日 <span class="mini" id="todayMini">—</span>
+          </button>
+          <button class="chip" id="chip48h" type="button" aria-pressed="false">
+            48h <span class="mini" id="h48Mini">—</span>
+          </button>
+          <button class="chip" id="chipWeek" type="button" aria-pressed="false">
+            7日 <span class="mini" id="weekMini">—</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="metaLine">
+        <div id="status">読み込み中…</div>
+        <div id="updated">—</div>
+      </div>
+    </section>
+
+    <main>
+      <div class="grid" id="grid" aria-live="polite"></div>
+      <div class="empty" id="empty" style="display:none;">
+        該当する記事がありません。キーワードを変えてみてね。
+      </div>
+
+      <div class="footer">
+        <button class="loadMore" id="moreBtn" type="button">もっと見る</button>
+      </div>
+      <div class="smallNote">※ サムネは自動生成（外部画像取得なし）</div>
+    </main>
+  </div>
+
+<script>
+(function(){
+  const POSTS_URL = './posts.json'; // ここ重要：GitHub PagesのrootでOK
+  const PAGE_SIZE = 12;
+
+  const el = (id)=>document.getElementById(id);
+  const grid = el('grid');
+  const empty = el('empty');
+  const status = el('status');
+  const updated = el('updated');
+  const countMini = el('countMini');
+  const reloadBtn = el('reloadBtn');
+  const moreBtn = el('moreBtn');
+  const q = el('q');
+
+  const chipToday = el('chipToday');
+  const chip48h = el('chip48h');
+  const chipWeek = el('chipWeek');
+  const todayMini = el('todayMini');
+  const h48Mini = el('h48Mini');
+  const weekMini = el('weekMini');
+
+  let all = [];
+  let view = [];
+  let cursor = 0;
+  let filterDays = null; // null / 0 / 2 / 7
+
+  function safeDate(iso){
+    const d = new Date(iso);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  function fmtJP(d){
+    // 2026/1/13 16:30:00 っぽい表示
+    const pad=(n)=>String(n).padStart(2,'0');
+    const y=d.getFullYear();
+    const m=d.getMonth()+1;
+    const day=d.getDate();
+    const hh=pad(d.getHours());
+    const mm=pad(d.getMinutes());
+    const ss=pad(d.getSeconds());
+    return `${y}/${m}/${day} ${hh}:${mm}:${ss}`;
+  }
+
+  function relTime(d){
+    const diff = Date.now() - d.getTime();
+    const sec = Math.floor(diff/1000);
+    if(sec < 60) return `${sec}秒前`;
+    const min = Math.floor(sec/60);
+    if(min < 60) return `${min}分前`;
+    const hr = Math.floor(min/60);
+    if(hr < 48) return `${hr}時間前`;
+    const day = Math.floor(hr/24);
+    return `${day}日前`;
+  }
+
+  function domainFromUrl(u){
+    try{
+      const url = new URL(u);
+      return url.hostname.replace(/^www\./,'');
+    }catch(e){
+      return '';
+    }
+  }
+
+  function favicon(domain){
+    // Google favicon API（軽い・CORS不要）
+    if(!domain) return '';
+    return `https://www.google.com/s2/favicons?sz=64&domain=${encodeURIComponent(domain)}`;
+  }
+
+  function hashStr(s){
+    // ざっくりハッシュ（サムネ色固定用）
+    let h=2166136261;
+    for(let i=0;i<s.length;i++){
+      h ^= s.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return (h>>>0);
+  }
+
+  function thumbSVG(seedText, title){
+    const h = hashStr(seedText);
+    const a = (h % 360);
+    const b = ((h>>8) % 360);
+    const c = ((h>>16) % 360);
+    const bg1 = `hsl(${a} 80% 55%)`;
+    const bg2 = `hsl(${b} 70% 45%)`;
+    const bg3 = `hsl(${c} 65% 50%)`;
+
+    const t = (title || '').trim().slice(0, 46);
+    const safe = t
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+
+    const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="${bg1}" stop-opacity="0.95"/>
+      <stop offset="0.55" stop-color="${bg2}" stop-opacity="0.90"/>
+      <stop offset="1" stop-color="${bg3}" stop-opacity="0.90"/>
+    </linearGradient>
+    <filter id="blur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#g)"/>
+  <circle cx="120" cy="100" r="110" fill="rgba(255,255,255,.18)" filter="url(#blur)"/>
+  <circle cx="690" cy="80" r="130" fill="rgba(0,0,0,.12)" filter="url(#blur)"/>
+  <circle cx="640" cy="380" r="170" fill="rgba(255,255,255,.14)" filter="url(#blur)"/>
+
+  <rect x="34" y="292" width="732" height="124" rx="22" fill="rgba(0,0,0,.28)"/>
+  <text x="62" y="334" font-size="28" font-family="ui-sans-serif,system-ui,-apple-system" fill="rgba(255,255,255,.92)">
+    ${safe}
+  </text>
+  <text x="62" y="372" font-size="18" font-family="ui-sans-serif,system-ui,-apple-system" fill="rgba(255,255,255,.78)">
+    最新ニュース • Boat RSS
+  </text>
+
+  <path d="M64 120c90 0 140-40 180-120" stroke="rgba(255,255,255,.65)" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <path d="M64 150c70 0 110-22 140-70" stroke="rgba(255,255,255,.50)" stroke-width="6" stroke-linecap="round" fill="none"/>
+</svg>`.trim();
+
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  }
+
+  function normalizePosts(arr){
+    const out = [];
+    for(const p of (arr || [])){
+      const id = String(p.id ?? '');
+      const title = String(p.title ?? '').trim();
+      const link = String(p.link ?? '').trim();
+      const sourceUrl = String(p.sourceUrl ?? '').trim();
+      const d = safeDate(p.date);
+      if(!id || !title || !link || !d) continue;
+      out.push({
+        id,
+        title,
+        link,
+        sourceUrl,
+        date: d,
+        domain: domainFromUrl(sourceUrl),
+      });
+    }
+    // 新しい順
+    out.sort((a,b)=>b.date - a.date);
+    return out;
+  }
+
+  function countByWindow(posts){
+    const now = Date.now();
+    const within = (days)=>{
+      const ms = days*24*3600*1000;
+      return posts.filter(p => (now - p.date.getTime()) <= ms).length;
+    };
+    // 「今日」は 24h 相当でざっくり
+    return { today: within(1), h48: within(2), week: within(7) };
+  }
+
+  function applyFilter(){
+    const keyword = (q.value || '').trim().toLowerCase();
+    const now = Date.now();
+    let filtered = all;
+
+    if(filterDays != null){
+      const ms = filterDays*24*3600*1000;
+      filtered = filtered.filter(p => (now - p.date.getTime()) <= ms);
+    }
+    if(keyword){
+      filtered = filtered.filter(p => p.title.toLowerCase().includes(keyword));
+    }
+    view = filtered;
+    cursor = 0;
+    grid.innerHTML = '';
+    renderNext();
+    empty.style.display = view.length ? 'none' : 'block';
+    status.textContent = view.length
+      ? `表示中: ${Math.min(view.length, cursor)}件 / 全${all.length}件`
+      : `表示中: 0件 / 全${all.length}件`;
+  }
+
+  function cardHTML(p){
+    const dt = fmtJP(p.date);
+    const rel = relTime(p.date);
+    const dom = p.domain || 'source';
+    const fav = favicon(dom);
+    const thumb = thumbSVG(p.id + p.title, p.title);
+
+    return `
+      <article class="card">
+        <a href="${p.link}" aria-label="${escapeHtml(p.title)}">
+          <img class="thumb" src="${thumb}" alt="" loading="lazy" decoding="async" />
+          <div class="cardBody">
+            <h2 class="title">${escapeHtml(p.title)}</h2>
+            <div class="subRow">
+              <div class="src">
+                ${fav ? `<img src="${fav}" width="16" height="16" alt="" style="border-radius:4px; opacity:.95">` : ''}
+                <span title="${escapeHtml(dom)}">${escapeHtml(dom)}</span>
+                <span class="badge" title="${escapeHtml(dt)}">${escapeHtml(rel)}</span>
+              </div>
+              <div title="${escapeHtml(dt)}">${escapeHtml(dt.split(' ')[0])}</div>
+            </div>
+          </div>
+        </a>
+      </article>
+    `.trim();
+  }
+
+  function escapeHtml(s){
+    return String(s)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;')
+      .replace(/'/g,'&#039;');
+  }
+
+  function renderNext(){
+    const slice = view.slice(cursor, cursor + PAGE_SIZE);
+    const html = slice.map(cardHTML).join('');
+    grid.insertAdjacentHTML('beforeend', html);
+    cursor += slice.length;
+
+    status.textContent = `表示中: ${cursor}件 / 全${all.length}件`;
+    moreBtn.disabled = cursor >= view.length;
+    moreBtn.textContent = cursor >= view.length ? 'これ以上ありません' : 'もっと見る';
+  }
+
+  function setChip(chip, pressed){
+    chip.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+  }
+
+  function resetChips(){
+    setChip(chipToday, false);
+    setChip(chip48h, false);
+    setChip(chipWeek, false);
+  }
+
+  function bind(){
+    reloadBtn.addEventListener('click', load);
+    moreBtn.addEventListener('click', renderNext);
+    q.addEventListener('input', ()=>applyFilter());
+
+    chipToday.addEventListener('click', ()=>{
+      const on = chipToday.getAttribute('aria-pressed') !== 'true';
+      resetChips();
+      if(on){ setChip(chipToday,true); filterDays = 1; } else { filterDays = null; }
+      applyFilter();
+    });
+    chip48h.addEventListener('click', ()=>{
+      const on = chip48h.getAttribute('aria-pressed') !== 'true';
+      resetChips();
+      if(on){ setChip(chip48h,true); filterDays = 2; } else { filterDays = null; }
+      applyFilter();
+    });
+    chipWeek.addEventListener('click', ()=>{
+      const on = chipWeek.getAttribute('aria-pressed') !== 'true';
+      resetChips();
+      if(on){ setChip(chipWeek,true); filterDays = 7; } else { filterDays = null; }
+      applyFilter();
+    });
+  }
+
+  async function load(){
+    status.textContent = '読み込み中…';
+    empty.style.display = 'none';
+    moreBtn.disabled = true;
+
+    try{
+      // cache bust（GitHub Pagesのキャッシュ対策）
+      const res = await fetch(POSTS_URL + '?t=' + Date.now(), { cache: 'no-store' });
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      const json = await res.json();
+
+      all = normalizePosts(json);
+      countMini.textContent = all.length ? `${all.length}件` : '0件';
+
+      const c = countByWindow(all);
+      todayMini.textContent = `${c.today}`;
+      h48Mini.textContent = `${c.h48}`;
+      weekMini.textContent = `${c.week}`;
+
+      updated.textContent = all[0]?.date ? `更新: ${fmtJP(all[0].date)}` : '更新: —';
+
+      applyFilter();
+      moreBtn.disabled = false;
+      if(!all.length){
+        empty.style.display = 'block';
+        status.textContent = '記事がありません（posts.json が空かも）';
+      }
+    }catch(e){
+      status.textContent = `読み込み失敗: ${e.message} | posts.json が見つからない/壊れてる可能性`;
+      empty.style.display = 'block';
+      empty.textContent = 'posts.json が見つからないか、JSON形式が壊れています。';
+      moreBtn.disabled = true;
+    }
+  }
+
+  bind();
+  load();
+})();
+</script>
 </body>
 </html>
