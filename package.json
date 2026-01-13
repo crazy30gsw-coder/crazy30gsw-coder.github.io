@@ -1,11 +1,6 @@
 {
-  "name": "crazy30gsw-coder-github-io",
-  "private": true,
   "type": "module",
   "scripts": {
-    "build": "node scripts/build-posts.mjs"
-  },
-  "dependencies": {
-    "rss-parser": "^3.13.0"
+    "build": "node create-sites.mjs"
   }
 }
