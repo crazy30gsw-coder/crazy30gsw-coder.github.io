@@ -5,81 +5,107 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>最新記事</title>
   <style>
-    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif; margin: 24px; }
-    h1 { font-size: 40px; margin: 0 0 16px; }
-    .meta { color: #666; margin-bottom: 18px; }
-    .card { border: 1px solid #eee; border-radius: 14px; padding: 14px 16px; margin: 12px 0; }
-    a { color: #0b5fff; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .empty { color:#999; padding: 12px 0; }
-    .btn { display:inline-block; padding:10px 14px; border:1px solid #ddd; border-radius:12px; cursor:pointer; user-select:none; }
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans JP",sans-serif;margin:0;background:#fff;color:#111}
+    header{padding:22px 18px 10px}
+    h1{margin:0;font-size:46px;letter-spacing:.02em}
+    .bar{display:flex;gap:12px;align-items:center;margin-top:10px}
+    .muted{color:#666}
+    button{border:1px solid #ddd;background:#fff;border-radius:14px;padding:10px 14px;font-size:14px}
+    main{padding:10px 14px 40px}
+    .card{border:1px solid #eee;border-radius:18px;padding:16px 16px;margin:14px 0;background:#fff}
+    .title{font-size:22px;font-weight:800;line-height:1.25;margin:0 0 10px}
+    .title a{color:#0a58ff;text-decoration:none}
+    .title a:hover{text-decoration:underline}
+    .meta{display:flex;gap:10px;align-items:center;color:#666;font-size:13px}
+    .meta a{color:#666;text-decoration:underline}
+    .error{color:#b00020}
   </style>
 </head>
 <body>
-  <h1>最新記事</h1>
-  <div class="meta">
-    <span id="status">読み込み中...</span>
-    &nbsp;|&nbsp;
-    <span class="btn" id="reload">再読み込み</span>
-  </div>
+  <header>
+    <h1>最新記事</h1>
+    <div class="bar">
+      <div id="status" class="muted">読み込み中...</div>
+      <button id="reload">再読み込み</button>
+    </div>
+  </header>
 
-  <div id="list"></div>
+  <main id="list"></main>
 
   <script>
-    async function loadPosts() {
-      const status = document.getElementById("status");
-      const list = document.getElementById("list");
-      list.innerHTML = "";
-      status.textContent = "posts.json を取得中...";
+    const $status = document.getElementById("status");
+    const $list = document.getElementById("list");
+    document.getElementById("reload").addEventListener("click", () => load());
 
-      try {
-        const res = await fetch("./posts.json?ts=" + Date.now(), { cache: "no-store" });
-        if (!res.ok) throw new Error("HTTP " + res.status);
+    function fmtJST(iso){
+      try{
+        const d = new Date(iso);
+        const y = d.getFullYear();
+        const m = String(d.getMonth()+1).padStart(2,"0");
+        const day = String(d.getDate()).padStart(2,"0");
+        const hh = String(d.getHours()).padStart(2,"0");
+        const mm = String(d.getMinutes()).padStart(2,"0");
+        const ss = String(d.getSeconds()).padStart(2,"0");
+        return `${y}/${m}/${day} ${hh}:${mm}:${ss}`;
+      }catch(e){ return iso; }
+    }
+
+    async function load(){
+      $status.classList.remove("error");
+      $status.textContent = "読み込み中...";
+      $list.innerHTML = "";
+
+      // cache回避（GitHub Pagesのキャッシュで古いposts.json掴むのを防ぐ）
+      const url = `./posts.json?ts=${Date.now()}`;
+
+      try{
+        const res = await fetch(url, { cache: "no-store" });
+        if(!res.ok) throw new Error(`HTTP ${res.status}`);
         const posts = await res.json();
 
-        if (!Array.isArray(posts) || posts.length === 0) {
-          status.textContent = "記事がまだありません（posts.json が空）";
-          list.innerHTML = '<div class="empty">記事がありません</div>';
+        if(!Array.isArray(posts) || posts.length === 0){
+          $status.textContent = "記事なし（posts.jsonが空）";
           return;
         }
 
-        // 新しい順にソート（dateがあれば）
-        posts.sort((a,b) => (new Date(b.date || 0)) - (new Date(a.date || 0)));
+        $status.textContent = `表示中: ${posts.length}件`;
 
-        status.textContent = `表示中: ${posts.length}件`;
-        for (const p of posts) {
-          const title = (p.title || "(no title)");
-          const link = (p.link || "#");
+        for(const post of posts){
+          const card = document.createElement("div");
+          card.className = "card";
 
-          const div = document.createElement("div");
-          div.className = "card";
-          div.innerHTML = `
-            <div style="font-weight:700; font-size:18px; line-height:1.35;">
-              <a href="${link}">${escapeHtml(title)}</a>
-            </div>
-            <div style="color:#666; margin-top:6px; font-size:13px;">
-              ${p.date ? new Date(p.date).toLocaleString("ja-JP") : ""}
-            </div>
+          const h = document.createElement("h2");
+          h.className = "title";
+
+          const a = document.createElement("a");
+          // ✅ ここが肝：外部ではなく /posts/ のHTMLへ飛ばす
+          a.href = post.link;       // 例: /posts/1768....html
+          a.textContent = post.title || "(no title)";
+          a.target = "_self";
+          a.rel = "noopener";
+
+          h.appendChild(a);
+
+          const meta = document.createElement("div");
+          meta.className = "meta";
+          meta.innerHTML = `
+            <span>${fmtJST(post.date)}</span>
+            ${post.sourceUrl ? `<span>｜</span><a href="${post.sourceUrl}" target="_blank" rel="noopener">元記事</a>` : ""}
           `;
-          list.appendChild(div);
+
+          card.appendChild(h);
+          card.appendChild(meta);
+          $list.appendChild(card);
         }
-      } catch (e) {
-        status.textContent = "読み込み失敗: " + e.message;
-        list.innerHTML = '<div class="empty">posts.json が見つからないか、壊れています</div>';
+
+      }catch(err){
+        $status.classList.add("error");
+        $status.textContent = `読み込み失敗: ${String(err.message || err)}`;
+        $list.innerHTML = `<div class="muted">posts.json が見つからないか、壊れています</div>`;
       }
     }
 
-    function escapeHtml(s){
-      return String(s)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#39;");
-    }
-
-    document.getElementById("reload").addEventListener("click", loadPosts);
-    loadPosts();
+    load();
   </script>
 </body>
 </html>
