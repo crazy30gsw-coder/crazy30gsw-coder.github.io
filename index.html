@@ -4,653 +4,72 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>まとめ速報（芸能×政治）</title>
-  <meta name="description" content="芸能ニュース中心に、政治も混ぜたまとめ速報。RSSから自動更新。" />
-  <meta name="theme-color" content="#ff6a00" />
-
+  <meta name="description" content="芸能ニュース中心＋政治も混ぜたまとめ速報" />
   <style>
-    :root{
-      --bg:#f3f3f3;
-      --ink:#111;
-      --muted:#666;
-      --line:#e6e6e6;
-      --brand:#ff6a00;
-      --brand2:#ffcc00;
-      --link:#0b57d0;
-      --card:#fff;
-      --shadow: 0 10px 25px rgba(0,0,0,.06);
-      --radius:12px;
-      --max:1120px;
-      --side:320px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans JP", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
-      background:var(--bg);
-      color:var(--ink);
-    }
-    a{color:var(--link); text-decoration:none}
-    a:hover{text-decoration:underline}
-
-    /* ===== Header ===== */
-    header{
-      background: linear-gradient(180deg, #ff7a1a, #ff6a00);
-      border-bottom: 1px solid rgba(0,0,0,.08);
-      position:sticky;
-      top:0;
-      z-index:50;
-    }
-    .hwrap{max-width:var(--max); margin:0 auto; padding:12px 14px;}
-    .hbar{display:flex; align-items:center; gap:12px;}
-    .logo{
-      width:44px;height:44px;border-radius:12px;
-      background: linear-gradient(135deg, var(--brand2), #fff);
-      display:grid;place-items:center;
-      font-weight:1000;
-      color:#111;
-      box-shadow: 0 10px 25px rgba(0,0,0,.10);
-      flex:0 0 auto;
-    }
-    .sitename{
-      display:flex; flex-direction:column; line-height:1.1;
-      color:#fff;
-      min-width:0;
-    }
-    .sitename b{font-size:20px; letter-spacing:.02em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-    .sitename small{opacity:.92}
-    .hmeta{
-      margin-left:auto;
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-      color:#fff;
-      font-size:12px;
-    }
-    .pill{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:8px 10px;
-      border-radius:999px;
-      background: rgba(255,255,255,.18);
-      border: 1px solid rgba(255,255,255,.18);
-      backdrop-filter: blur(6px);
-    }
-    .dot{width:8px;height:8px;border-radius:999px;background:#fff}
-    .btn{
-      border:1px solid rgba(255,255,255,.28);
-      background: rgba(255,255,255,.18);
-      color:#fff;
-      font-weight:900;
-      padding:9px 12px;
-      border-radius:999px;
-      cursor:pointer;
-    }
-    .btn:active{transform:translateY(1px)}
-
-    /* nav */
-    .nav{
-      margin-top:10px;
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-    .tab{
-      color:#fff;
-      font-weight:900;
-      font-size:13px;
-      padding:9px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.22);
-      background: rgba(0,0,0,.10);
-      cursor:pointer;
-      user-select:none;
-    }
-    .tab.on{
-      background:#111;
-      border-color:#111;
-    }
-
-    /* ===== Layout ===== */
-    .wrap{max-width:var(--max); margin:0 auto; padding:14px;}
-    .layout{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:14px;
-    }
-    @media(min-width:980px){
-      .layout{
-        grid-template-columns: 1fr var(--side);
-        align-items:start;
-      }
-    }
-
-    /* ===== Main box ===== */
-    .box{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-    .boxtitle{
-      padding:12px 14px;
-      font-weight:1000;
-      border-bottom:1px solid var(--line);
-      background: linear-gradient(180deg, #ffffff, #fafafa);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .boxtitle small{color:var(--muted); font-weight:700}
-    .tools{
-      padding:12px 14px;
-      border-bottom:1px solid var(--line);
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      align-items:center;
-      background:#fff;
-    }
-    .search{
-      flex:1 1 280px;
-      display:flex; align-items:center; gap:10px;
-      border:1px solid var(--line);
-      border-radius:999px;
-      padding:10px 12px;
-      background:#fff;
-    }
-    .search input{
-      width:100%;
-      border:0; outline:0;
-      font-size:14px;
-    }
-    .hint{color:var(--muted); font-size:12px}
-
-    /* ===== Article list ===== */
-    .list{padding:0}
-    .item{
-      display:flex;
-      gap:12px;
-      padding:12px 14px;
-      border-top:1px solid var(--line);
-      background:#fff;
-    }
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans JP",sans-serif;background:#f3f3f3;color:#111}
+    header{background:#ff6a00;color:#fff;padding:12px 14px;font-weight:1000;position:sticky;top:0}
+    .wrap{max-width:980px;margin:0 auto;padding:14px}
+    .box{background:#fff;border:1px solid #e6e6e6;border-radius:12px;overflow:hidden}
+    .item{display:flex;gap:12px;padding:12px 14px;border-top:1px solid #e6e6e6}
     .item:first-child{border-top:0}
-    .thumb{
-      width:140px; height:88px;
-      border-radius:10px;
-      overflow:hidden;
-      background:#eee;
-      flex:0 0 140px;
-      position:relative;
-      border:1px solid #efefef;
-    }
-    .thumb img{
-      width:100%; height:100%;
-      object-fit:cover;
-      display:block;
-    }
-    .badge{
-      position:absolute;
-      left:8px; top:8px;
-      background:rgba(17,17,17,.85);
-      color:#fff;
-      font-weight:1000;
-      font-size:12px;
-      padding:5px 8px;
-      border-radius:999px;
-      backdrop-filter: blur(6px);
-    }
-
-    .content{min-width:0; flex:1 1 auto; display:flex; flex-direction:column; gap:6px;}
-    .title{
-      font-weight:1000;
-      font-size:16px;
-      line-height:1.25;
-      color:#0b3aa6;
-      display:-webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow:hidden;
-    }
-    .meta{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      align-items:center;
-      color:var(--muted);
-      font-size:12px;
-      margin-top:auto;
-    }
-    .tag{
-      display:inline-flex;
-      align-items:center;
-      padding:5px 10px;
-      border-radius:999px;
-      background:#fff7ef;
-      border:1px solid #ffd7bb;
-      color:#7a2f00;
-      font-weight:1000;
-    }
-    .src{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:5px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:#fff;
-      color:#111;
-      font-weight:800;
-    }
-    .favicon{width:14px;height:14px;border-radius:4px; background:#e5e7eb}
-    .desc{
-      color:#333;
-      font-size:13px;
-      line-height:1.45;
-      display:-webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow:hidden;
-    }
-
-    .linkAll{
-      display:flex;
-      color:inherit;
-      text-decoration:none;
-      width:100%;
-    }
-    .linkAll:hover{text-decoration:none}
-
-    /* ===== Sidebar ===== */
-    .sidepad{padding:12px 14px;}
-    .sideSection + .sideSection{margin-top:12px;}
-    .sideTitle{
-      font-weight:1000;
-      border-left:5px solid var(--brand);
-      padding-left:10px;
-      margin:0 0 10px;
-    }
-    .sideList{display:flex; flex-direction:column; gap:8px;}
-    .sideItem{
-      display:flex; gap:10px; align-items:flex-start;
-      padding:10px;
-      border:1px solid var(--line);
-      border-radius:12px;
-      background:#fff;
-    }
-    .rank{
-      width:28px;height:28px;border-radius:10px;
-      display:grid;place-items:center;
-      background:#111;
-      color:#fff;
-      font-weight:1000;
-      flex:0 0 28px;
-    }
-    .sideItem b{
-      font-size:13px; line-height:1.25;
-      display:-webkit-box;
-      -webkit-line-clamp:2;
-      -webkit-box-orient:vertical;
-      overflow:hidden;
-      color:#0b3aa6;
-    }
-    .foot{
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.6;
-      padding:12px 14px;
-      border-top:1px solid var(--line);
-      background:#fafafa;
-    }
-    .empty{
-      padding:14px;
-      color:var(--muted);
-      font-size:14px;
-    }
+    .thumb{width:140px;height:88px;border-radius:10px;overflow:hidden;background:#eee;flex:0 0 140px}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .title{font-weight:1000;color:#0b3aa6;line-height:1.25}
+    .meta{margin-top:6px;color:#666;font-size:12px;display:flex;gap:10px;flex-wrap:wrap}
+    a{color:inherit;text-decoration:none}
+    a:hover .title{text-decoration:underline}
+    .search{margin:12px 0;display:flex;gap:10px}
+    input{flex:1;border:1px solid #e6e6e6;border-radius:999px;padding:10px 12px;font-size:14px}
   </style>
 </head>
-
 <body>
-<header>
-  <div class="hwrap">
-    <div class="hbar">
-      <div class="logo">速</div>
-      <div class="sitename">
-        <b>まとめ速報（芸能×政治）</b>
-        <small>RSSから自動更新</small>
-      </div>
-
-      <div class="hmeta">
-        <span class="pill"><span class="dot"></span><span id="statText">読み込み中…</span></span>
-        <span class="pill">更新: <span id="updatedAt">-</span></span>
-        <button class="btn" id="reloadBtn" type="button">再読み込み</button>
-      </div>
-    </div>
-
-    <div class="nav" id="tabs">
-      <div class="tab on" data-filter="all">全部</div>
-      <div class="tab" data-filter="ent">芸能</div>
-      <div class="tab" data-filter="sc">スキャンダル</div>
-      <div class="tab" data-filter="pol">政治</div>
-      <div class="tab" data-filter="other">その他</div>
-    </div>
-  </div>
-</header>
-
+<header>まとめ速報（芸能×政治）</header>
 <div class="wrap">
-  <div class="layout">
-    <!-- Main -->
-    <section class="box">
-      <div class="boxtitle">
-        <span>最新記事</span>
-        <small>表示中: <b id="shown">0</b> / 全 <b id="total">0</b></small>
-      </div>
-
-      <div class="tools">
-        <div class="search" role="search" aria-label="検索">
-          🔎 <input id="q" type="search" placeholder="検索（例：結婚、炎上、逮捕、総理、選挙…）" />
-        </div>
-        <div class="hint" id="hint"></div>
-      </div>
-
-      <div class="list" id="list"></div>
-      <div class="empty" id="empty" style="display:none;">該当する記事がありません。</div>
-
-      <div class="foot">
-        ※ RSS等から取得した情報を整形して表示します。内容は元記事を参照してください。<br/>
-        ※ 画像は取れないことがあります（その場合は自動サムネを表示）。
-      </div>
-    </section>
-
-    <!-- Sidebar -->
-    <aside class="box">
-      <div class="boxtitle"><span>サイドバー</span><small>それっぽさ強化</small></div>
-      <div class="sidepad">
-        <div class="sideSection">
-          <h3 class="sideTitle">人気記事（仮）</h3>
-          <div class="sideList" id="popular"></div>
-        </div>
-
-        <div class="sideSection">
-          <h3 class="sideTitle">カテゴリ</h3>
-          <div class="sideList" id="cats"></div>
-        </div>
-
-        <div class="sideSection">
-          <h3 class="sideTitle">更新情報</h3>
-          <div class="sideList">
-            <div class="sideItem"><div class="rank">i</div><div><b>自動更新：GitHub Actions</b><div style="color:var(--muted);font-size:12px;margin-top:4px">posts.json を更新 → 反映</div></div></div>
-          </div>
-        </div>
-      </div>
-    </aside>
-  </div>
+  <div class="search"><input id="q" placeholder="検索（例：炎上、結婚、総理…）"></div>
+  <div class="box" id="list"></div>
+  <div id="empty" style="color:#666;padding:12px 2px;display:none;">記事がありません</div>
 </div>
 
 <script>
-  const POSTS_URL = "./posts.json";
-
-  function escapeHtml(s){
-    return String(s ?? "").replace(/[&<>"']/g, c => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-    }[c]));
+const POSTS_URL="./posts.json";
+function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function placeholder(){return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="560" height="320"><rect width="100%" height="100%" fill="#111827"/><text x="40" y="210" font-size="48" fill="#fff" font-family="system-ui" font-weight="900">NEWS</text></svg>`)}
+let ALL=[];
+function render(){
+  const q=(document.getElementById("q").value||"").trim().toLowerCase();
+  let items=ALL;
+  if(q) items=items.filter(p=>((p.title||"")+" "+(p.source||"")+" "+(p.description||"")).toLowerCase().includes(q));
+  const list=document.getElementById("list");
+  list.innerHTML="";
+  document.getElementById("empty").style.display=items.length? "none":"block";
+  for(const p of items){
+    const a=document.createElement("a");
+    a.href=p.page || p.url; // ★個別ページへ
+    const img=p.image || placeholder();
+    a.innerHTML=`
+      <div class="item">
+        <div class="thumb"><img src="${escapeHtml(img)}" onerror="this.src='${placeholder()}'"></div>
+        <div style="min-width:0">
+          <div class="title">${escapeHtml(p.title||"(タイトルなし)")}</div>
+          <div class="meta">
+            <span>${escapeHtml(p.source||"")}</span>
+            <span>${escapeHtml(p.category||"")}</span>
+          </div>
+        </div>
+      </div>
+    `;
+    list.appendChild(a);
   }
-  function hostOf(url){
-    try{ return new URL(url).hostname.replace(/^www\./,""); } catch { return ""; }
-  }
-  function faviconUrl(url){
-    const h = hostOf(url);
-    return h ? `https://www.google.com/s2/favicons?domain=${h}&sz=64` : "";
-  }
-  function fmtDate(iso){
-    try{
-      const d = new Date(iso);
-      const y = d.getFullYear();
-      const m = String(d.getMonth()+1).padStart(2,"0");
-      const day = String(d.getDate()).padStart(2,"0");
-      const hh = String(d.getHours()).padStart(2,"0");
-      const mm = String(d.getMinutes()).padStart(2,"0");
-      return `${y}/${m}/${day} ${hh}:${mm}`;
-    } catch { return iso || "-"; }
-  }
-  function timeAgo(iso){
-    try{
-      const t = new Date(iso).getTime();
-      const diff = Date.now() - t;
-      const min = Math.floor(diff/60000);
-      if(min < 1) return "たった今";
-      if(min < 60) return `${min}分前`;
-      const h = Math.floor(min/60);
-      if(h < 24) return `${h}時間前`;
-      const d = Math.floor(h/24);
-      return `${d}日前`;
-    } catch { return ""; }
-  }
-
-  // 画像が取れない時の「それっぽい」自動サムネ（黒×オレンジ）
-  function placeholderSvg(word="NO IMAGE"){
-    const safe = String(word).slice(0,18);
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="560" height="320">
-      <defs>
-        <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#0b1220"/>
-          <stop offset="1" stop-color="#111827"/>
-        </linearGradient>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#g)"/>
-      <circle cx="470" cy="70" r="90" fill="rgba(255,106,0,.25)"/>
-      <circle cx="420" cy="110" r="60" fill="rgba(255,204,0,.18)"/>
-      <text x="40" y="210" font-size="48" fill="rgba(255,255,255,.92)" font-family="system-ui" font-weight="900">${escapeHtml(safe)}</text>
-      <text x="40" y="250" font-size="20" fill="rgba(255,255,255,.65)" font-family="system-ui">まとめ速報</text>
-    </svg>`;
-    return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
-  }
-
-  // jinっぽい分類（芸能/スキャンダル/政治）
-  function pickCategory(p){
-    const t = ((p.title||"") + " " + (p.description||"") + " " + (p.source||"") + " " + (p.url||"")).toLowerCase();
-
-    const scandal = ["不倫","浮気","炎上","逮捕","解雇","降板","謝罪","損害","暴露","流出","スキャンダル","違法","賭博","薬","暴力","パワハラ","セクハラ","誹謗中傷"];
-    const politics = ["政治","総理","首相","官房","大臣","与党","野党","国会","選挙","投票","支持率","税","増税","減税","外交","内閣","法案","都知事","知事","市長"];
-
-    if (scandal.some(w => t.includes(w))) return "sc";
-    if (politics.some(w => t.includes(w))) return "pol";
-
-    // 芸能っぽいワード（広め）
-    const ent = ["芸能","俳優","女優","アイドル","結婚","離婚","熱愛","ドラマ","映画","テレビ","cm","番組","歌手","ライブ","ユーチューバー","youtuber","tiktok","インスタ","sns"];
-    if (ent.some(w => t.includes(w))) return "ent";
-
-    return "other";
-  }
-
-  function label(cat){
-    if(cat==="ent") return "芸能";
-    if(cat==="sc") return "スキャンダル";
-    if(cat==="pol") return "政治";
-    return "その他";
-  }
-
-  let ALL = [];
-  let current = "all";
-
-  function render(){
-    const q = (document.getElementById("q").value || "").trim().toLowerCase();
-    let items = ALL.slice();
-
-    if(current !== "all"){
-      items = items.filter(x => x._cat === current);
-    }
-    if(q){
-      items = items.filter(x => ((x.title||"") + " " + (x.description||"") + " " + (x.source||"")).toLowerCase().includes(q));
-    }
-
-    document.getElementById("shown").textContent = String(items.length);
-    document.getElementById("total").textContent = String(ALL.length);
-
-    const list = document.getElementById("list");
-    list.innerHTML = "";
-
-    const empty = document.getElementById("empty");
-    if(!items.length){
-      empty.style.display = "block";
-      return;
-    }
-    empty.style.display = "none";
-
-    const frag = document.createDocumentFragment();
-
-    for(const p of items){
-      const row = document.createElement("div");
-      row.className = "item";
-
-      const a = document.createElement("a");
-      a.className = "linkAll";
-      a.href = p.url;
-      a.target = "_blank";
-      a.rel = "noopener noreferrer";
-
-      const th = document.createElement("div");
-      th.className = "thumb";
-      const img = document.createElement("img");
-      img.loading = "lazy";
-      img.alt = p.title || "";
-      img.src = p.image || placeholderSvg(label(p._cat));
-      img.onerror = () => { img.src = placeholderSvg(label(p._cat)); };
-
-      const badge = document.createElement("div");
-      badge.className = "badge";
-      badge.textContent = timeAgo(p.date) || "NEW";
-
-      th.appendChild(img);
-      th.appendChild(badge);
-
-      const ct = document.createElement("div");
-      ct.className = "content";
-
-      const ttl = document.createElement("div");
-      ttl.className = "title";
-      ttl.textContent = p.title || "(タイトルなし)";
-
-      const desc = document.createElement("div");
-      desc.className = "desc";
-      desc.textContent = p.description || "";
-
-      const meta = document.createElement("div");
-      meta.className = "meta";
-
-      const tag = document.createElement("span");
-      tag.className = "tag";
-      tag.textContent = label(p._cat);
-
-      const src = document.createElement("span");
-      src.className = "src";
-      const fav = faviconUrl(p.url);
-      src.innerHTML = `${fav ? `<img class="favicon" src="${fav}" alt="" onerror="this.style.display='none'">` : ""}<span>${escapeHtml(p.source || hostOf(p.url) || "source")}</span>`;
-
-      const time = document.createElement("span");
-      time.textContent = fmtDate(p.date);
-
-      meta.appendChild(tag);
-      meta.appendChild(src);
-      meta.appendChild(time);
-
-      ct.appendChild(ttl);
-      if(p.description) ct.appendChild(desc);
-      ct.appendChild(meta);
-
-      a.appendChild(th);
-      a.appendChild(ct);
-
-      row.appendChild(a);
-      frag.appendChild(row);
-    }
-    list.appendChild(frag);
-
-    // 人気記事（仮）：先頭から5本を表示
-    const pop = document.getElementById("popular");
-    pop.innerHTML = "";
-    ALL.slice(0,5).forEach((p,i)=>{
-      const box = document.createElement("a");
-      box.className = "sideItem";
-      box.href = p.url;
-      box.target = "_blank";
-      box.rel = "noopener noreferrer";
-      box.innerHTML = `<div class="rank">${i+1}</div><div><b>${escapeHtml(p.title || "")}</b><div style="color:var(--muted);font-size:12px;margin-top:4px">${escapeHtml(p.source || hostOf(p.url) || "")}</div></div>`;
-      pop.appendChild(box);
-    });
-
-    // カテゴリ（件数）
-    const cats = { ent:0, sc:0, pol:0, other:0 };
-    ALL.forEach(p=>cats[p._cat] = (cats[p._cat]||0)+1);
-    const catsEl = document.getElementById("cats");
-    catsEl.innerHTML = "";
-    Object.entries(cats).forEach(([k,v])=>{
-      const box = document.createElement("div");
-      box.className = "sideItem";
-      box.innerHTML = `<div class="rank">${label(k).slice(0,1)}</div><div><b>${label(k)}</b><div style="color:var(--muted);font-size:12px;margin-top:4px">${v}件</div></div>`;
-      catsEl.appendChild(box);
-    });
-  }
-
-  async function load(){
-    document.getElementById("hint").textContent = "";
-    document.getElementById("statText").textContent = "読み込み中…";
-    try{
-      const res = await fetch(POSTS_URL + "?v=" + Date.now(), { cache: "no-store" });
-      if(!res.ok) throw new Error("HTTP " + res.status);
-      const data = await res.json();
-
-      let posts = [];
-      let updatedAt = null;
-      if(Array.isArray(data)){
-        posts = data;
-      } else {
-        posts = data.posts || [];
-        updatedAt = data.updatedAt || null;
-      }
-
-      ALL = posts.map(p=>{
-        const url = p.url || p.link || "";
-        const obj = {
-          title: p.title || "",
-          url,
-          source: p.source || hostOf(url) || "",
-          date: p.date || p.published || p.pubDate || new Date().toISOString(),
-          image: p.image || p.ogImage || p.thumbnail || "",
-          description: p.description || p.summary || ""
-        };
-        obj._cat = pickCategory(obj);
-        return obj;
-      }).sort((a,b)=> new Date(b.date) - new Date(a.date));
-
-      document.getElementById("updatedAt").textContent = updatedAt ? fmtDate(updatedAt) : (ALL[0]?.date ? fmtDate(ALL[0].date) : "-");
-      document.getElementById("statText").textContent = `全${ALL.length}件`;
-      render();
-    } catch(err){
-      console.error(err);
-      document.getElementById("statText").textContent = "読み込み失敗";
-      document.getElementById("hint").textContent = "posts.json が見つからない/壊れてる可能性";
-      document.getElementById("empty").style.display = "block";
-      document.getElementById("empty").textContent = "読み込み失敗: posts.json が見つからないか壊れてます";
-    }
-  }
-
-  // Tabs
-  document.getElementById("tabs").addEventListener("click", (e)=>{
-    const t = e.target.closest(".tab");
-    if(!t) return;
-    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
-    t.classList.add("on");
-    current = t.dataset.filter || "all";
-    render();
-  });
-
-  document.getElementById("reloadBtn").addEventListener("click", load);
-  document.getElementById("q").addEventListener("input", render);
-
-  load();
+}
+async function load(){
+  const res=await fetch(POSTS_URL+"?v="+Date.now(),{cache:"no-store"});
+  const data=await res.json();
+  const posts=Array.isArray(data)?data:(data.posts||[]);
+  ALL=posts;
+  render();
+}
+document.getElementById("q").addEventListener("input",render);
+load().catch(()=>{document.getElementById("empty").style.display="block";});
 </script>
 </body>
 </html>
