@@ -1,659 +1,213 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>速報まとめ | Boat Picks</title>
-  <meta name="description" content="RSSから自動収集した速報まとめ。見出し中心でサクッと読む。" />
-  <meta name="theme-color" content="#111827" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ボートレース速報まとめ</title>
+
   <style>
-    :root{
-      --bg:#0b1020;
-      --panel:rgba(255,255,255,.06);
-      --panel2:rgba(255,255,255,.10);
-      --line:rgba(255,255,255,.10);
-      --text:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.60);
-      --muted2:rgba(255,255,255,.45);
-      --accent:#f59e0b; /* 速報感 */
-      --accent2:#60a5fa;
-      --danger:#fb7185;
-      --shadow:0 14px 44px rgba(0,0,0,.40);
-      --r16:16px;
-      --r24:24px;
-      --max:1100px;
+    :root {
+      --bg: #ffffff;
+      --card: #f9f9f9;
+      --border: #e5e5e5;
+      --text: #111111;
+      --muted: #666666;
+      --accent: #0066ff;
+      --accent-soft: #eaf2ff;
     }
-    @media (prefers-color-scheme: light){
-      :root{
-        --bg:#f6f7fb;
-        --panel:rgba(0,0,0,.04);
-        --panel2:rgba(0,0,0,.06);
-        --line:rgba(0,0,0,.10);
-        --text:rgba(0,0,0,.88);
-        --muted:rgba(0,0,0,.58);
-        --muted2:rgba(0,0,0,.46);
-        --shadow:0 14px 44px rgba(0,0,0,.12);
-      }
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", "Hiragino Sans", "Yu Gothic", "Helvetica Neue", Arial;
-      color:var(--text);
-      background:
-        radial-gradient(1200px 520px at 10% -10%, rgba(245,158,11,.25), transparent 60%),
-        radial-gradient(1000px 520px at 90% 0%, rgba(96,165,250,.18), transparent 60%),
-        radial-gradient(900px 560px at 50% 110%, rgba(251,113,133,.12), transparent 60%),
-        var(--bg);
-    }
-    a{color:inherit; text-decoration:none}
 
-    /* ===== Header ===== */
-    .top{
-      position:sticky; top:0; z-index:50;
-      backdrop-filter: blur(12px);
-      background: linear-gradient(180deg, rgba(10,15,30,.82), rgba(10,15,30,.45));
-      border-bottom:1px solid var(--line);
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
+      background: var(--bg);
+      color: var(--text);
     }
-    @media (prefers-color-scheme: light){
-      .top{background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.72));}
+
+    header {
+      padding: 14px 16px;
+      border-bottom: 2px solid var(--border);
+      background: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
-    .top-inner{
-      max-width:var(--max); margin:0 auto;
-      padding:12px 12px;
-      display:flex; gap:12px; align-items:center; justify-content:space-between;
+
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 800;
     }
-    .brand{
-      display:flex; align-items:center; gap:12px; min-width:0;
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 12px;
     }
-    .mark{
-      width:44px; height:44px; border-radius:14px;
-      background: linear-gradient(135deg, rgba(245,158,11,.95), rgba(251,113,133,.85));
-      box-shadow: 0 10px 30px rgba(245,158,11,.18);
-      display:grid; place-items:center;
-      border:1px solid rgba(255,255,255,.12);
-      flex:0 0 auto;
+
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
     }
-    .brand h1{
-      margin:0; font-size:18px; line-height:1.1;
-      letter-spacing:.02em;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-      max-width: 44vw;
-    }
-    .brand .sub{
-      margin-top:2px; font-size:12px; color:var(--muted);
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-      max-width: 44vw;
-    }
-    .right{
-      display:flex; align-items:center; gap:10px; flex:0 0 auto;
-    }
-    .pill{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:10px 12px;
+
+    .pill {
+      padding: 6px 12px;
+      font-size: 13px;
       border-radius: 999px;
-      border:1px solid var(--line);
-      background: linear-gradient(180deg, var(--panel2), var(--panel));
-      box-shadow: var(--shadow);
-      font-size:13px;
-      cursor:pointer;
-      user-select:none;
-    }
-    .pill .dot{width:8px; height:8px; border-radius:999px; background: var(--accent)}
-    .pill.secondary .dot{background: var(--accent2)}
-    .pill small{color:var(--muted); font-size:12px}
-
-    /* ===== Layout ===== */
-    .wrap{max-width:var(--max); margin:0 auto; padding:14px 12px 70px}
-    .toolbar{
-      display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between;
-      margin-top:10px;
-    }
-    .search{
-      flex: 1 1 320px;
-      display:flex; gap:10px; align-items:center;
-      padding:12px 14px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.12);
-    }
-    @media (prefers-color-scheme: light){
-      .search{background: rgba(255,255,255,.72)}
-    }
-    .search input{
-      width:100%;
-      border:none; outline:none; background:transparent;
-      color:var(--text); font-size:15px;
-    }
-    .search input::placeholder{color:var(--muted2)}
-
-    .tabs{
-      display:flex; gap:8px; flex-wrap:wrap;
-    }
-    .tab{
-      padding:10px 12px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.06);
-      font-size:13px;
-      cursor:pointer;
-      user-select:none;
-    }
-    .tab[aria-pressed="true"]{
-      border-color: rgba(245,158,11,.55);
-      box-shadow: 0 0 0 3px rgba(245,158,11,.18);
-    }
-    .meta{
-      margin-top:10px;
-      display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between;
-      color:var(--muted);
-      font-size:13px;
+      border: 1px solid var(--border);
+      background: #fff;
+      cursor: pointer;
     }
 
-    /* ===== Main Grid ===== */
-    .grid{
-      margin-top:14px;
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:12px;
-    }
-    @media (min-width: 920px){
-      .grid{grid-template-columns: 1.6fr 1fr;}
-    }
-    .panel{
-      border:1px solid var(--line);
-      border-radius: var(--r24);
-      background: linear-gradient(180deg, var(--panel2), var(--panel));
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .panel-title{
-      padding:14px 14px;
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      border-bottom:1px solid var(--line);
-    }
-    .panel-title h2{
-      margin:0; font-size:16px; letter-spacing:.02em;
-      display:flex; align-items:center; gap:10px;
-    }
-    .tag{
-      font-size:12px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.10);
-      color:var(--muted);
-    }
-    @media (prefers-color-scheme: light){
-      .tag{background: rgba(255,255,255,.75)}
+    .pill.primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
     }
 
-    /* ===== Cards ===== */
-    .list{padding:12px}
-    .card{
-      display:grid;
-      grid-template-columns: 120px 1fr;
-      gap:12px;
-      padding:12px;
-      border-radius: var(--r16);
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.08);
-      transition: transform .12s ease, border-color .12s ease;
-    }
-    @media (prefers-color-scheme: light){
-      .card{background: rgba(255,255,255,.72)}
-    }
-    .card:hover{transform: translateY(-2px); border-color: rgba(245,158,11,.35)}
-    .thumb{
-      width:100%;
-      aspect-ratio: 16/10;
-      border-radius: 14px;
-      overflow:hidden;
-      display:block;
-      border:1px solid rgba(255,255,255,.10);
-      background:#111827;
-    }
-    .title{
-      margin:0;
-      font-size:15px;
-      line-height:1.35;
-      letter-spacing:.01em;
-      display:-webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow:hidden;
-    }
-    .subrow{
-      margin-top:8px;
-      display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:space-between;
-      color:var(--muted);
-      font-size:12.5px;
-    }
-    .src{
-      display:inline-flex; align-items:center; gap:8px; min-width:0;
-    }
-    .src span{
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-      max-width: 240px;
-    }
-    .badge{
-      font-size:12px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.10);
-      color:var(--muted);
-    }
-    @media (prefers-color-scheme: light){
-      .badge{background: rgba(255,255,255,.75)}
+    .pill.secondary {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-color: var(--accent-soft);
     }
 
-    /* ===== Hot list ===== */
-    .rank{
-      padding:10px 12px 14px;
-    }
-    .rankItem{
-      display:flex; gap:10px; align-items:flex-start;
-      padding:10px 10px;
-      border-radius: var(--r16);
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.08);
-    }
-    @media (prefers-color-scheme: light){
-      .rankItem{background: rgba(255,255,255,.72)}
-    }
-    .rankNo{
-      width:30px; height:30px; border-radius: 12px;
-      display:grid; place-items:center;
-      background: linear-gradient(135deg, rgba(245,158,11,.95), rgba(96,165,250,.75));
-      color:white; font-weight:800;
-      flex:0 0 auto;
-      border:1px solid rgba(255,255,255,.12);
-    }
-    .rankTitle{
-      margin:0;
-      font-size:13.5px;
-      line-height:1.35;
-      display:-webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow:hidden;
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    .footer{
-      margin-top:14px;
-      display:flex; justify-content:center; gap:10px; flex-wrap:wrap;
+    .card {
+      display: flex;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--card);
     }
-    .more{
-      padding:12px 16px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background: linear-gradient(180deg, var(--panel2), var(--panel));
-      box-shadow: var(--shadow);
-      cursor:pointer;
-      font-size:14px;
-      color:var(--text);
-    }
-    .more:disabled{opacity:.55; cursor:not-allowed}
 
-    .empty{
-      margin-top:12px;
-      padding:18px 16px;
-      border-radius: var(--r24);
-      border:1px dashed var(--line);
-      color:var(--muted);
-      text-align:center;
-      background: rgba(0,0,0,.08);
+    .thumb {
+      width: 120px;
+      height: 68px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #ddd, #f0f0f0);
+      flex-shrink: 0;
+      background-size: cover;
+      background-position: center;
     }
-    @media (prefers-color-scheme: light){
-      .empty{background: rgba(255,255,255,.72)}
+
+    .card-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .title {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0 0 6px;
+      line-height: 1.4;
+    }
+
+    .title a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .title a:hover {
+      text-decoration: underline;
+    }
+
+    .meta {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    footer {
+      margin-top: 30px;
+      padding: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
     }
   </style>
 </head>
 
 <body>
-  <!-- Header -->
-  <header class="top">
-    <div class="top-inner">
-      <div class="brand">
-        <div class="mark" aria-hidden="true">📰</div>
-        <div style="min-width:0">
-          <h1>速報まとめ</h1>
-          <div class="sub" id="subline">RSS自動収集（読み取り用）</div>
-        </div>
-      </div>
 
-      <div class="right">
-        <button class="pill" id="reloadBtn" type="button" title="posts.jsonを再読み込み">
-          <span class="dot" aria-hidden="true"></span>
-          更新
-          <small id="countMini">—</small>
-        </button>
-        <a class="pill secondary" href="https://github.com/crazy30gsw-coder" target="_blank" rel="noopener">
-          <span class="dot" aria-hidden="true"></span>
-          GitHub
-          <small>編集</small>
-        </a>
-      </div>
-    </div>
-  </header>
+<header>
+  <h1>ボートレース速報まとめ</h1>
+</header>
 
-  <div class="wrap">
-    <!-- Toolbar -->
-    <div class="toolbar">
-      <div class="search" role="search">
-        🔎 <input id="q" type="search" placeholder="検索（例：G1、芦屋、住之江、峰、事故…）" autocomplete="off">
-      </div>
-      <div class="tabs" aria-label="カテゴリ">
-        <button class="tab" data-tab="all" aria-pressed="true">全部</button>
-        <button class="tab" data-tab="g1" aria-pressed="false">G1</button>
-        <button class="tab" data-tab="race" aria-pressed="false">レース</button>
-        <button class="tab" data-tab="pro" aria-pressed="false">選手</button>
-        <button class="tab" data-tab="ent" aria-pressed="false">話題</button>
-        <button class="tab" data-tab="other" aria-pressed="false">その他</button>
-      </div>
-    </div>
+<div class="container">
 
-    <div class="meta">
-      <div id="status">読み込み中…</div>
-      <div id="updated">—</div>
-    </div>
-
-    <!-- Main -->
-    <div class="grid">
-      <!-- Left: Latest -->
-      <section class="panel">
-        <div class="panel-title">
-          <h2>🔥 最新速報</h2>
-          <span class="tag" id="filterTag">ALL</span>
-        </div>
-        <div class="list" id="list"></div>
-      </section>
-
-      <!-- Right: Hot Rank -->
-      <aside class="panel">
-        <div class="panel-title">
-          <h2>📈 今日の注目</h2>
-          <span class="tag">Hot</span>
-        </div>
-        <div class="rank" id="rank"></div>
-      </aside>
-    </div>
-
-    <div id="empty" class="empty" style="display:none;">該当する記事がありません。</div>
-
-    <div class="footer">
-      <button class="more" id="moreBtn" type="button">もっと見る</button>
-    </div>
+  <div class="toolbar">
+    <span class="pill primary">最新</span>
+    <span class="pill">G1</span>
+    <span class="pill">レース</span>
+    <span class="pill">選手</span>
+    <span class="pill secondary">速報</span>
   </div>
 
+  <div id="status" class="meta">読み込み中...</div>
+
+  <div id="list" class="list"></div>
+</div>
+
+<footer>
+  ※ 当サイトはRSSを元に自動生成された速報まとめです
+</footer>
+
 <script>
-(() => {
-  const POSTS_URL = './posts.json';
-  const PAGE_SIZE = 10;
+  const listEl = document.getElementById("list");
+  const statusEl = document.getElementById("status");
 
-  const $ = (id) => document.getElementById(id);
-  const list = $('list');
-  const rank = $('rank');
-  const empty = $('empty');
-  const status = $('status');
-  const updated = $('updated');
-  const subline = $('subline');
-  const countMini = $('countMini');
-  const reloadBtn = $('reloadBtn');
-  const moreBtn = $('moreBtn');
-  const q = $('q');
-  const filterTag = $('filterTag');
+  fetch("./posts.json")
+    .then(res => {
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return res.json();
+    })
+    .then(posts => {
+      statusEl.textContent = `表示中：${posts.length} 件`;
 
-  const tabs = Array.from(document.querySelectorAll('.tab'));
+      posts.forEach(post => {
+        const card = document.createElement("div");
+        card.className = "card";
 
-  let all = [];
-  let view = [];
-  let cursor = 0;
-  let tab = 'all';
+        // ダミーサムネ（後で実画像に差し替え可能）
+        const thumb = document.createElement("div");
+        thumb.className = "thumb";
 
-  // ===== utils =====
-  const safeDate = (iso) => {
-    const d = new Date(iso);
-    return isNaN(d.getTime()) ? null : d;
-  };
-  const pad = (n) => String(n).padStart(2,'0');
-  const fmtJP = (d) => `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-  const relTime = (d) => {
-    const diff = Date.now() - d.getTime();
-    const sec = Math.floor(diff/1000);
-    if(sec < 60) return `${sec}秒前`;
-    const min = Math.floor(sec/60);
-    if(min < 60) return `${min}分前`;
-    const hr = Math.floor(min/60);
-    if(hr < 48) return `${hr}時間前`;
-    const day = Math.floor(hr/24);
-    return `${day}日前`;
-  };
-  const domainFromUrl = (u) => {
-    try { return new URL(u).hostname.replace(/^www\./,''); } catch { return ''; }
-  };
-  const favicon = (domain) => domain ? `https://www.google.com/s2/favicons?sz=64&domain=${encodeURIComponent(domain)}` : '';
+        const content = document.createElement("div");
+        content.className = "card-content";
 
-  const escapeHtml = (s) => String(s)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+        const title = document.createElement("h2");
+        title.className = "title";
+        title.innerHTML = `<a href="${post.link}">${post.title}</a>`;
 
-  // サムネ（外部画像なしで“画像付き感”）
-  const hashStr = (s) => {
-    let h=2166136261;
-    for(let i=0;i<s.length;i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
-    return (h>>>0);
-  };
-  const thumbSVG = (seedText, title) => {
-    const h = hashStr(seedText);
-    const a = (h % 360), b = ((h>>8) % 360), c = ((h>>16) % 360);
-    const bg1 = `hsl(${a} 85% 55%)`;
-    const bg2 = `hsl(${b} 75% 45%)`;
-    const bg3 = `hsl(${c} 70% 50%)`;
-    const t = (title || '').trim().slice(0, 44);
-    const safe = escapeHtml(t);
+        const meta = document.createElement("div");
+        meta.className = "meta";
+        meta.textContent = new Date(post.date).toLocaleString("ja-JP");
 
-    const svg = `
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="${bg1}" stop-opacity="0.98"/>
-      <stop offset="0.55" stop-color="${bg2}" stop-opacity="0.92"/>
-      <stop offset="1" stop-color="${bg3}" stop-opacity="0.92"/>
-    </linearGradient>
-    <filter id="blur" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="20"/>
-    </filter>
-  </defs>
-  <rect width="800" height="500" fill="url(#g)"/>
-  <circle cx="120" cy="120" r="120" fill="rgba(255,255,255,.18)" filter="url(#blur)"/>
-  <circle cx="700" cy="90" r="140" fill="rgba(0,0,0,.12)" filter="url(#blur)"/>
-  <circle cx="620" cy="420" r="190" fill="rgba(255,255,255,.14)" filter="url(#blur)"/>
-  <rect x="28" y="324" width="744" height="144" rx="22" fill="rgba(0,0,0,.30)"/>
-  <text x="52" y="374" font-size="28" font-family="ui-sans-serif,system-ui" fill="rgba(255,255,255,.94)">${safe}</text>
-  <text x="52" y="416" font-size="18" font-family="ui-sans-serif,system-ui" fill="rgba(255,255,255,.78)">速報まとめ • Boat Picks</text>
-</svg>`.trim();
+        content.appendChild(title);
+        content.appendChild(meta);
 
-    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-  };
+        card.appendChild(thumb);
+        card.appendChild(content);
 
-  // タイトルからカテゴリ自動判定（posts.jsonにカテゴリが無くてもOK）
-  const detectCat = (title) => {
-    const t = (title || '').toLowerCase();
-    if(/g1|グランプリ|sg|g2|g3/.test(t)) return 'g1';
-    if(/住之江|芦屋|多摩川|平和島|蒲郡|福岡|戸田|江戸川|びわこ|尼崎|丸亀|若松|桐生|三国/.test(title)) return 'race';
-    if(/選手|藤森|峰|馬場|毒島|石野|瓜生|守田|茅原|桐生順平|西山/.test(title)) return 'pro';
-    if(/芸能|abema|結婚|炎上|写真|ドラマ|テレビ|話題/.test(t)) return 'ent';
-    return 'other';
-  };
-
-  const normalize = (arr) => {
-    const out = [];
-    for(const p of (arr || [])){
-      const id = String(p.id ?? '');
-      const title = String(p.title ?? '').trim();
-      const link = String(p.link ?? '').trim();
-      const sourceUrl = String(p.sourceUrl ?? '').trim();
-      const d = safeDate(p.date);
-      if(!id || !title || !link || !d) continue;
-      const domain = domainFromUrl(sourceUrl);
-      out.push({ id, title, link, sourceUrl, date:d, domain, cat: detectCat(title) });
-    }
-    out.sort((a,b)=>b.date - a.date);
-    return out;
-  };
-
-  // “Hot”っぽいランキング（簡易：鮮度＋キーワードでスコア）
-  const scoreHot = (p) => {
-    const hours = (Date.now() - p.date.getTime()) / 3600000;
-    let s = Math.max(0, 48 - hours); // 48h以内が強い
-    if(/g1|sg|優勝|事故|炎上|衝撃|不倫|逮捕|写真/.test(p.title.toLowerCase())) s += 12;
-    if(p.cat === 'g1') s += 6;
-    return s;
-  };
-
-  const renderCard = (p) => {
-    const dt = fmtJP(p.date);
-    const rel = relTime(p.date);
-    const dom = p.domain || 'source';
-    const fav = favicon(dom);
-    const thumb = thumbSVG(p.id + p.title, p.title);
-
-    return `
-      <a class="card" href="${p.link}" aria-label="${escapeHtml(p.title)}">
-        <img class="thumb" src="${thumb}" alt="" loading="lazy" decoding="async">
-        <div>
-          <p class="title">${escapeHtml(p.title)}</p>
-          <div class="subrow">
-            <div class="src">
-              ${fav ? `<img src="${fav}" width="16" height="16" alt="" style="border-radius:4px;opacity:.95">` : ''}
-              <span title="${escapeHtml(dom)}">${escapeHtml(dom)}</span>
-              <span class="badge" title="${escapeHtml(dt)}">${escapeHtml(rel)}</span>
-            </div>
-            <span title="${escapeHtml(dt)}">${escapeHtml(dt.split(' ')[0])}</span>
-          </div>
-        </div>
-      </a>
-    `.trim();
-  };
-
-  const renderRankItem = (p, i) => {
-    const dom = p.domain || 'source';
-    return `
-      <a class="rankItem" href="${p.link}" aria-label="${escapeHtml(p.title)}">
-        <div class="rankNo">${i+1}</div>
-        <div style="min-width:0">
-          <p class="rankTitle">${escapeHtml(p.title)}</p>
-          <div style="margin-top:6px;color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-            ${escapeHtml(dom)} ・ ${escapeHtml(relTime(p.date))}
-          </div>
-        </div>
-      </a>
-    `.trim();
-  };
-
-  const apply = () => {
-    const kw = (q.value || '').trim().toLowerCase();
-    let filtered = all;
-
-    if(tab !== 'all'){
-      filtered = filtered.filter(p => p.cat === tab);
-    }
-    if(kw){
-      filtered = filtered.filter(p => p.title.toLowerCase().includes(kw));
-    }
-
-    view = filtered;
-    cursor = 0;
-    list.innerHTML = '';
-    empty.style.display = 'none';
-
-    filterTag.textContent = tab.toUpperCase();
-    loadMore();
-
-    if(!view.length){
-      empty.style.display = 'block';
-      status.textContent = `表示中: 0件 / 全${all.length}件`;
-      moreBtn.disabled = true;
-    }
-  };
-
-  const loadMore = () => {
-    const slice = view.slice(cursor, cursor + PAGE_SIZE);
-    list.insertAdjacentHTML('beforeend', slice.map(renderCard).join(''));
-    cursor += slice.length;
-
-    status.textContent = `表示中: ${cursor}件 / 全${all.length}件`;
-    moreBtn.disabled = cursor >= view.length;
-    moreBtn.textContent = cursor >= view.length ? 'これ以上ありません' : 'もっと見る';
-  };
-
-  const setTab = (next) => {
-    tab = next;
-    tabs.forEach(b => b.setAttribute('aria-pressed', b.dataset.tab === next ? 'true' : 'false'));
-    apply();
-  };
-
-  const renderRank = () => {
-    const top = [...all]
-      .sort((a,b)=>scoreHot(b)-scoreHot(a))
-      .slice(0, 6);
-    rank.innerHTML = top.map(renderRankItem).join('');
-  };
-
-  // スクロールで自動読み込み（無限スクロール風）
-  const onScroll = () => {
-    if(moreBtn.disabled) return;
-    const y = window.scrollY + window.innerHeight;
-    const h = document.documentElement.scrollHeight;
-    if(h - y < 420){
-      loadMore();
-    }
-  };
-
-  const bind = () => {
-    reloadBtn.addEventListener('click', load);
-    moreBtn.addEventListener('click', loadMore);
-    q.addEventListener('input', apply);
-    tabs.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
-    window.addEventListener('scroll', onScroll, { passive:true });
-  };
-
-  async function load(){
-    status.textContent = '読み込み中…';
-    moreBtn.disabled = true;
-
-    try{
-      const res = await fetch(POSTS_URL + '?t=' + Date.now(), { cache:'no-store' });
-      if(!res.ok) throw new Error('HTTP ' + res.status);
-      const json = await res.json();
-
-      all = normalize(json);
-      countMini.textContent = `${all.length}件`;
-      subline.textContent = all[0]?.date ? `最終更新：${fmtJP(all[0].date)}` : 'RSS自動収集（読み取り用）';
-      updated.textContent = all[0]?.date ? `更新: ${fmtJP(all[0].date)}` : '更新: —';
-
-      renderRank();
-      apply();
-      moreBtn.disabled = false;
-
-      if(!all.length){
-        empty.style.display = 'block';
-        status.textContent = '記事がありません（posts.jsonが空かも）';
-      }
-    }catch(e){
-      status.textContent = `読み込み失敗: ${e.message} | posts.json が見つからない/壊れてる可能性`;
-      empty.style.display = 'block';
-      empty.textContent = 'posts.json が見つからないか、JSON形式が壊れています。';
-      moreBtn.disabled = true;
-    }
-  }
-
-  bind();
-  load();
-})();
+        listEl.appendChild(card);
+      });
+    })
+    .catch(err => {
+      statusEl.textContent = "読み込み失敗：" + err.message;
+    });
 </script>
+
 </body>
 </html>
