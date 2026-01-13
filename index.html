@@ -6,208 +6,225 @@
   <title>ボートレース速報まとめ</title>
 
   <style>
-    :root {
-      --bg: #ffffff;
-      --card: #f9f9f9;
-      --border: #e5e5e5;
-      --text: #111111;
-      --muted: #666666;
-      --accent: #0066ff;
-      --accent-soft: #eaf2ff;
+    :root{
+      --bg:#fff; --card:#f8f9fb; --border:#e6e6e6;
+      --text:#111; --muted:#666; --accent:#0b57d0;
+      --chip:#f1f3f5;
     }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-        "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    header {
-      padding: 14px 16px;
-      border-bottom: 2px solid var(--border);
-      background: #fff;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 22px;
-      font-weight: 800;
-    }
-
-    .container {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 12px;
-    }
-
-    .toolbar {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
-    }
-
-    .pill {
-      padding: 6px 12px;
-      font-size: 13px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: #fff;
-      cursor: pointer;
-    }
-
-    .pill.primary {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
-    }
-
-    .pill.secondary {
-      background: var(--accent-soft);
-      color: var(--accent);
-      border-color: var(--accent-soft);
-    }
-
-    .list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .card {
-      display: flex;
-      gap: 12px;
-      padding: 12px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      background: var(--card);
-    }
-
-    .thumb {
-      width: 120px;
-      height: 68px;
-      border-radius: 6px;
-      background: linear-gradient(135deg, #ddd, #f0f0f0);
-      flex-shrink: 0;
-      background-size: cover;
-      background-position: center;
-    }
-
-    .card-content {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .title {
-      font-size: 16px;
-      font-weight: 700;
-      margin: 0 0 6px;
-      line-height: 1.4;
-    }
-
-    .title a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    .title a:hover {
-      text-decoration: underline;
-    }
-
-    .meta {
-      font-size: 12px;
-      color: var(--muted);
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    footer {
-      margin-top: 30px;
-      padding: 20px;
-      text-align: center;
-      font-size: 12px;
-      color: var(--muted);
+    *{box-sizing:border-box}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Kaku Gothic ProN","Noto Sans JP",Meiryo,sans-serif;background:var(--bg);color:var(--text)}
+    header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:2px solid var(--border)}
+    .hd{max-width:980px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:10px}
+    .logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#ff6a00,#ffd000);display:grid;place-items:center;color:#111;font-weight:900}
+    .hd h1{margin:0;font-size:20px;font-weight:900;letter-spacing:.2px}
+    .sub{margin-left:auto;font-size:12px;color:var(--muted)}
+    .container{max-width:980px;margin:0 auto;padding:12px 12px 28px}
+    .topbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0 12px}
+    .search{flex:1;min-width:220px;display:flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:999px;padding:10px 12px;background:#fff}
+    .search input{border:0;outline:none;flex:1;font-size:14px}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:var(--chip);font-size:13px;cursor:pointer}
+    .chip.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+    #status{font-size:12px;color:var(--muted);margin:6px 2px 10px}
+    .list{display:flex;flex-direction:column;gap:12px}
+    .card{display:flex;gap:12px;padding:12px;border:1px solid var(--border);border-radius:14px;background:var(--card)}
+    .thumb{width:132px;height:74px;border-radius:10px;flex-shrink:0;background:#e9ecef;overflow:hidden;position:relative}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .thumb .badge{position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.65);color:#fff;font-size:11px;padding:4px 8px;border-radius:999px}
+    .content{flex:1;min-width:0}
+    .title{margin:0 0 8px;font-size:16px;font-weight:900;line-height:1.35}
+    .title a{color:var(--accent);text-decoration:none}
+    .title a:hover{text-decoration:underline}
+    .meta{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--muted);align-items:center}
+    .src{display:flex;align-items:center;gap:6px}
+    .dot{width:8px;height:8px;border-radius:50%;background:#ff3d00}
+    .footer{margin-top:20px;text-align:center;color:var(--muted);font-size:12px}
+    @media (max-width:480px){
+      .thumb{width:116px;height:66px}
+      .title{font-size:15px}
     }
   </style>
 </head>
 
 <body>
-
 <header>
-  <h1>ボートレース速報まとめ</h1>
+  <div class="hd">
+    <div class="logo">速</div>
+    <h1>ボートレース速報まとめ</h1>
+    <div class="sub" id="updated">更新: -</div>
+  </div>
 </header>
 
 <div class="container">
-
-  <div class="toolbar">
-    <span class="pill primary">最新</span>
-    <span class="pill">G1</span>
-    <span class="pill">レース</span>
-    <span class="pill">選手</span>
-    <span class="pill secondary">速報</span>
+  <div class="topbar">
+    <div class="search">
+      🔎
+      <input id="q" type="search" placeholder="検索（例：G1、芦屋、住之江、峰、事故…）">
+    </div>
+    <div class="chips">
+      <button class="chip on" data-filter="all">全部</button>
+      <button class="chip" data-filter="g1">G1</button>
+      <button class="chip" data-filter="race">レース</button>
+      <button class="chip" data-filter="player">選手</button>
+      <button class="chip" data-filter="topic">話題</button>
+      <button class="chip" data-filter="other">その他</button>
+    </div>
   </div>
 
-  <div id="status" class="meta">読み込み中...</div>
-
+  <div id="status">読み込み中...</div>
   <div id="list" class="list"></div>
-</div>
 
-<footer>
-  ※ 当サイトはRSSを元に自動生成された速報まとめです
-</footer>
+  <div class="footer">※ RSSを元に自動生成された速報まとめです</div>
+</div>
 
 <script>
   const listEl = document.getElementById("list");
   const statusEl = document.getElementById("status");
+  const updatedEl = document.getElementById("updated");
+  const qEl = document.getElementById("q");
+  const chips = Array.from(document.querySelectorAll(".chip"));
 
-  fetch("./posts.json")
+  let allPosts = [];
+  let activeFilter = "all";
+
+  const FALLBACK_IMG =
+    "data:image/svg+xml;charset=utf-8," +
+    encodeURIComponent(`
+      <svg xmlns="http://www.w3.org/2000/svg" width="800" height="450">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#e9ecef"/>
+            <stop offset="1" stop-color="#f8f9fa"/>
+          </linearGradient>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#g)"/>
+        <text x="50%" y="52%" font-size="40" text-anchor="middle" fill="#adb5bd" font-family="sans-serif">NO IMAGE</text>
+      </svg>
+    `);
+
+  function classify(title=""){
+    const t = title.toLowerCase();
+    if (t.includes("g1") || title.includes("Ｇ１") || title.includes("GⅠ")) return "g1";
+    if (title.includes("レース") || title.includes("優勝") || title.includes("準優") || title.includes("艇") || title.includes("枠")) return "race";
+    if (title.includes("選手") || title.match(/[ぁ-んァ-ン一-龥]{2,4}\s*[ぁ-んァ-ン一-龥]{2,4}/)) return "player";
+    if (title.includes("炎上") || title.includes("話題") || title.includes("騒然") || title.includes("悲報") || title.includes("衝撃")) return "topic";
+    return "other";
+  }
+
+  function timeAgo(dateStr){
+    const d = new Date(dateStr);
+    const diff = Date.now() - d.getTime();
+    const m = Math.floor(diff/60000);
+    if (m < 1) return "たった今";
+    if (m < 60) return `${m}分前`;
+    const h = Math.floor(m/60);
+    if (h < 24) return `${h}時間前`;
+    const day = Math.floor(h/24);
+    return `${day}日前`;
+  }
+
+  function render(){
+    listEl.innerHTML = "";
+    const q = (qEl.value || "").trim().toLowerCase();
+
+    const filtered = allPosts.filter(p => {
+      const cat = p.category || classify(p.title || "");
+      if (activeFilter !== "all" && cat !== activeFilter) return false;
+      if (!q) return true;
+      const hay = `${p.title || ""} ${p.sourceName || ""}`.toLowerCase();
+      return hay.includes(q);
+    });
+
+    statusEl.textContent = `表示中: ${filtered.length}件 / 全${allPosts.length}件`;
+
+    filtered.slice(0, 80).forEach(p => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const thumb = document.createElement("div");
+      thumb.className = "thumb";
+
+      const img = document.createElement("img");
+      img.loading = "lazy";
+      img.referrerPolicy = "no-referrer"; // 画像の参照元制限で弾かれにくくする
+      img.src = p.image || FALLBACK_IMG;
+      img.onerror = () => { img.src = FALLBACK_IMG; };
+
+      const badge = document.createElement("div");
+      badge.className = "badge";
+      badge.textContent = timeAgo(p.date);
+
+      thumb.appendChild(img);
+      thumb.appendChild(badge);
+
+      const content = document.createElement("div");
+      content.className = "content";
+
+      const title = document.createElement("h2");
+      title.className = "title";
+      title.innerHTML = `<a href="${p.link}">${p.title}</a>`;
+
+      const meta = document.createElement("div");
+      meta.className = "meta";
+
+      const src = document.createElement("div");
+      src.className = "src";
+      src.innerHTML = `<span class="dot"></span> ${p.sourceName || "news.google.com"}`;
+
+      const dt = document.createElement("div");
+      dt.textContent = new Date(p.date).toLocaleString("ja-JP");
+
+      meta.appendChild(src);
+      meta.appendChild(dt);
+
+      content.appendChild(title);
+      content.appendChild(meta);
+
+      card.appendChild(thumb);
+      card.appendChild(content);
+
+      listEl.appendChild(card);
+    });
+  }
+
+  chips.forEach(btn => {
+    btn.addEventListener("click", () => {
+      chips.forEach(b => b.classList.remove("on"));
+      btn.classList.add("on");
+      activeFilter = btn.dataset.filter;
+      render();
+    });
+  });
+
+  qEl.addEventListener("input", () => render());
+
+  fetch("./posts.json", { cache: "no-store" })
     .then(res => {
       if (!res.ok) throw new Error("HTTP " + res.status);
       return res.json();
     })
     .then(posts => {
-      statusEl.textContent = `表示中：${posts.length} 件`;
+      // date降順に整列
+      posts.sort((a,b) => new Date(b.date) - new Date(a.date));
 
-      posts.forEach(post => {
-        const card = document.createElement("div");
-        card.className = "card";
+      // category 付与（無ければ推定）
+      posts = posts.map(p => ({
+        ...p,
+        category: p.category || classify(p.title || "")
+      }));
 
-        // ダミーサムネ（後で実画像に差し替え可能）
-        const thumb = document.createElement("div");
-        thumb.className = "thumb";
+      allPosts = posts;
 
-        const content = document.createElement("div");
-        content.className = "card-content";
+      // 更新表示
+      if (posts[0]?.date) {
+        updatedEl.textContent = "更新: " + new Date(posts[0].date).toLocaleString("ja-JP");
+      }
 
-        const title = document.createElement("h2");
-        title.className = "title";
-        title.innerHTML = `<a href="${post.link}">${post.title}</a>`;
-
-        const meta = document.createElement("div");
-        meta.className = "meta";
-        meta.textContent = new Date(post.date).toLocaleString("ja-JP");
-
-        content.appendChild(title);
-        content.appendChild(meta);
-
-        card.appendChild(thumb);
-        card.appendChild(content);
-
-        listEl.appendChild(card);
-      });
+      render();
     })
     .catch(err => {
-      statusEl.textContent = "読み込み失敗：" + err.message;
+      statusEl.textContent = "読み込み失敗: " + err.message + "（posts.jsonが無い/壊れてる可能性）";
     });
 </script>
-
 </body>
 </html>
