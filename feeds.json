@@ -5,7 +5,11 @@
   },
   {
     "name": "スキャンダル - Googleニュース",
-    "url": "https://news.google.com/rss/search?q=%E4%B8%8D%E5%80%AB%20OR%20%E7%82%8E%E4%B8%8A%20OR%20%E9%80%AE%E6%8D%95%20OR%20%E9%99%8D%E6%9D%BF&hl=ja&gl=JP&ceid=JP:ja"
+    "url": "https://news.google.com/rss/search?q=%E4%B8%8D%E5%80%AB%20OR%20%E7%82%8E%E4%B8%8A%20OR%20%E9%80%AE%E6%8D%95%20OR%20%E9%99%8D%E6%9D%BF%20OR%20%E8%AC%9D%E7%BD%AA&hl=ja&gl=JP&ceid=JP:ja"
+  },
+  {
+    "name": "芸能（ドラマ/映画/アイドル）- Googleニュース",
+    "url": "https://news.google.com/rss/search?q=%E3%83%89%E3%83%A9%E3%83%9E%20OR%20%E6%98%A0%E7%94%BB%20OR%20%E3%82%A2%E3%82%A4%E3%83%89%E3%83%AB%20OR%20%E7%B5%90%E5%A9%9A%20OR%20%E7%86%B1%E6%84%9B&hl=ja&gl=JP&ceid=JP:ja"
   },
   {
     "name": "政治（混ぜる）- Googleニュース",
