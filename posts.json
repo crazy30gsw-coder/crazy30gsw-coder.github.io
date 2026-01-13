@@ -1,13 +1,1 @@
-{
-  "updatedAt": "2026-01-13T09:00:00+09:00",
-  "posts": [
-    {
-      "title": "【テスト】記事が表示されました",
-      "url": "https://example.com/",
-      "source": "example.com",
-      "date": "2026-01-13T09:00:00+09:00",
-      "image": "",
-      "category": "other"
-    }
-  ]
-}
+[]
