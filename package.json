@@ -1,10 +1,7 @@
 {
-  "name": "rss-to-gh-pages",
+  "name": "gh-news-site",
   "private": true,
   "type": "module",
-  "scripts": {
-    "update": "node tools/update_posts.js"
-  },
   "dependencies": {
     "rss-parser": "^3.13.0"
   }
