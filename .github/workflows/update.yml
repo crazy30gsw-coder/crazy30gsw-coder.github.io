@@ -3,7 +3,7 @@ name: Update site (RSS -> posts.json)
 on:
   workflow_dispatch:
   schedule:
-    - cron: "*/30 * * * *"  # 30分おき（あとで変更OK）
+    - cron: "*/30 * * * *"
 
 permissions:
   contents: write
@@ -15,7 +15,6 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,12 +30,40 @@ jobs:
       - name: Install deps
         run: npm ci
 
+      - name: Show files (before)
+        run: |
+          echo "=== root files ==="
+          ls -la
+          echo "=== feeds.json ==="
+          if [ -f feeds.json ]; then
+            cat feeds.json
+          else
+            echo "feeds.json NOT FOUND"
+          fi
+
       - name: Generate site files
-        run: node create-sites.mjs
+        run: |
+          set -e
+          node create-sites.mjs
+
+      - name: Show files (after)
+        run: |
+          echo "=== after generate: root files ==="
+          ls -la
+          echo "=== find posts.json ==="
+          find . -maxdepth 3 -name "posts.json" -print
+          echo "=== show posts.json (if exists) ==="
+          if [ -f posts.json ]; then
+            echo "posts.json size:" && wc -c posts.json
+            echo "posts.json head:" && head -c 800 posts.json && echo
+          else
+            echo "posts.json NOT FOUND at root"
+          fi
+          echo "=== show posts folder ==="
+          if [ -d posts ]; then ls -la posts | head -n 50; else echo "posts dir NOT FOUND"; fi
 
       - name: Commit & Push if changed
         run: |
-          git status --porcelain
           if [ -n "$(git status --porcelain)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
