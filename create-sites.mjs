@@ -5,94 +5,93 @@ import Parser from "rss-parser";
 const parser = new Parser();
 
 // ===== 設定 =====
-const FEEDS_PATH = "./feeds.json";
-const POSTS_JSON = "./posts.json";
-const POSTS_DIR = "./posts";
-const MAX_ITEMS = 80;
+const FEEDS_FILE = "feeds.json";
+const POSTS_JSON = "posts.json";
+const POSTS_DIR = "posts";
+const MAX_ITEMS_PER_FEED = 20;
 
-// ===== 準備 =====
-if (!fs.existsSync(FEEDS_PATH)) {
+// ===== feeds.json 読み込み =====
+if (!fs.existsSync(FEEDS_FILE)) {
   console.error("❌ feeds.json が見つかりません");
   process.exit(1);
 }
 
-if (!fs.existsSync(POSTS_DIR)) {
-  fs.mkdirSync(POSTS_DIR, { recursive: true });
+const raw = JSON.parse(fs.readFileSync(FEEDS_FILE, "utf-8"));
+
+// ★ ここが超重要
+const feeds = Array.isArray(raw) ? raw : raw.feeds;
+
+if (!Array.isArray(feeds)) {
+  console.error("❌ feeds.json の形式が不正です（配列ではありません）");
+  process.exit(1);
 }
 
-const feeds = JSON.parse(fs.readFileSync(FEEDS_PATH, "utf-8"));
+// ===== 出力フォルダ準備 =====
+if (!fs.existsSync(POSTS_DIR)) {
+  fs.mkdirSync(POSTS_DIR);
+}
 
-let allPosts = [];
+const allPosts = [];
 
-// ===== RSS取得 =====
+// ===== RSS 処理 =====
 for (const feed of feeds) {
   try {
-    console.log("▶ RSS取得:", feed.url);
-    const res = await parser.parseURL(feed.url);
+    console.log(`📡 Fetch: ${feed.url}`);
+    const rss = await parser.parseURL(feed.url);
 
-    for (const item of res.items) {
+    const items = rss.items.slice(0, MAX_ITEMS_PER_FEED);
+
+    for (const item of items) {
       const id =
         item.guid ||
         item.id ||
-        Buffer.from(item.link).toString("base64").slice(0, 32);
+        Buffer.from(item.link).toString("base64");
 
-      allPosts.push({
+      const post = {
         id,
-        title: item.title ?? "",
-        link: item.link ?? "",
-        date: item.isoDate ?? item.pubDate ?? new Date().toISOString(),
-        source: feed.name ?? res.title ?? "",
+        title: item.title || "",
+        link: item.link || "",
+        date: item.isoDate || item.pubDate || "",
+        source: rss.title || "",
+        category: feed.category || "その他",
         image:
           item.enclosure?.url ||
           item["media:content"]?.url ||
-          item["media:thumbnail"]?.url ||
           null,
-        summary:
-          item.contentSnippet ??
-          item.summary ??
-          item.content?.slice(0, 120) ??
-          "",
-      });
-    }
-  } catch (err) {
-    console.error("❌ RSS失敗:", feed.url, err.message);
-  }
-}
+        description: item.contentSnippet || ""
+      };
 
-// ===== 整理 =====
-allPosts = allPosts
-  .filter(p => p.title && p.link)
-  .sort((a, b) => new Date(b.date) - new Date(a.date))
-  .slice(0, MAX_ITEMS);
+      allPosts.push(post);
 
-// ===== posts.json 出力 =====
-fs.writeFileSync(POSTS_JSON, JSON.stringify(allPosts, null, 2));
-console.log("✅ posts.json 生成:", allPosts.length, "件");
-
-// ===== 個別記事HTML生成 =====
-for (const post of allPosts) {
-  const html = `<!doctype html>
+      // 個別記事HTML
+      const html = `<!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <title>${post.title}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-  <h1>${post.title}</h1>
-  <p>${post.date}</p>
-  ${
-    post.image
-      ? `<img src="${post.image}" style="max-width:100%;height:auto;">`
-      : ""
-  }
-  <p>${post.summary}</p>
-  <p><a href="${post.link}" target="_blank">元記事を開く</a></p>
-  <p><a href="/">一覧へ戻る</a></p>
+<h1>${post.title}</h1>
+<p>${post.date}</p>
+<p><a href="${post.link}" target="_blank">元記事を読む</a></p>
 </body>
 </html>`;
 
-  fs.writeFileSync(path.join(POSTS_DIR, `${post.id}.html`), html);
+      fs.writeFileSync(
+        path.join(POSTS_DIR, `${id}.html`),
+        html
+      );
+    }
+  } catch (e) {
+    console.error("⚠ RSSエラー:", feed.url, e.message);
+  }
 }
 
-console.log("✅ posts/ HTML生成 完了");
+// ===== posts.json 出力 =====
+fs.writeFileSync(
+  POSTS_JSON,
+  JSON.stringify(allPosts, null, 2)
+);
+
+console.log(`✅ posts.json 生成: ${allPosts.length} 件`);
