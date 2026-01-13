@@ -1,40 +1,48 @@
 import fs from "fs";
-import fetch from "node-fetch";
-import { JSDOM } from "jsdom";
-import Parser from "rss-parser";
 
-const parser = new Parser();
-const RSS_URL = "https://news.google.com/rss/search?q=ボートレース&hl=ja&gl=JP&ceid=JP:ja";
+const feeds = JSON.parse(fs.readFileSync("feeds.json","utf8")).feeds;
+const max = JSON.parse(fs.readFileSync("feeds.json","utf8")).maxItems || 80;
 
-async function getOgImage(url) {
-  try {
-    const res = await fetch(url, { timeout: 10000 });
-    const html = await res.text();
-    const dom = new JSDOM(html);
-    const meta = dom.window.document.querySelector(
-      'meta[property="og:image"]'
-    );
-    return meta ? meta.content : null;
-  } catch (e) {
-    return null;
+async function fetchText(u){
+  const r=await fetch(u,{headers:{'user-agent':'rss'}});
+  return await r.text();
+}
+
+function pick(tag,x){
+  const m=x.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`,"i"));
+  return m?m[1].replace(/<!\\[CDATA\\[|\\]\\]>/g,""):"";
+}
+
+function img(x){
+  const m=x.match(/<img[^>]+src="([^"]+)"/i);
+  return m?m[1]:"";
+}
+
+let all=[];
+for(const f of feeds){
+  const xml=await fetchText(f.url);
+  for(const m of xml.matchAll(/<item>([\\s\\S]*?)<\/item>/g)){
+    const it=m[1];
+    const title=pick("title",it);
+    const url=pick("link",it);
+    const date=new Date(pick("pubDate",it)||Date.now()).toISOString();
+    all.push({
+      title,url,
+      source:new URL(url).hostname,
+      date,
+      image:img(it),
+      category: title.includes("G1")?"G1":"その他"
+    });
   }
 }
 
-(async () => {
-  const feed = await parser.parseURL(RSS_URL);
-  const posts = [];
+all=[...new Map(all.map(p=>[p.url,p])).values()]
+.sort((a,b)=>new Date(b.date)-new Date(a.date))
+.slice(0,max);
 
-  for (const item of feed.items.slice(0, 30)) {
-    const image = await getOgImage(item.link);
+fs.writeFileSync("posts.json",JSON.stringify({
+  updatedAt:new Date().toISOString(),
+  posts:all
+},null,2));
 
-    posts.push({
-      id: Date.now() + Math.random(),
-      title: item.title,
-      link: item.link,
-      date: item.isoDate,
-      source: "news.google.com",
-      image: image || "https://via.placeholder.com/400x225?text=NO+IMAGE"
-    });
-  }
-
-  fs.writeFileSync("posts.json", JSON
+console.log("posts.json 更新:",all.length);
