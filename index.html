@@ -137,6 +137,11 @@
       box-shadow: var(--shadow);
       display:flex;
       min-height:128px;
+      cursor:pointer; /* ★追加：押せる感 */
+      -webkit-tap-highlight-color: transparent;
+    }
+    .card:active{
+      transform: translateY(1px);
     }
     .thumb{
       width:140px;
@@ -277,6 +282,7 @@
 <script>
   // ===== 設定 =====
   const POSTS_URL = "./posts.json"; // ここだけでOK
+
   const PLACEHOLDER_SVG = (title="NO IMAGE") => {
     const safe = (title||"NO IMAGE").slice(0,26);
     const svg =
@@ -297,7 +303,7 @@
 
   function escapeXml(s){
     return String(s).replace(/[<>&'"]/g, c => ({
-      "<":"&lt;"," >":"&gt;","&":"&amp;","'":"&apos;",'"':"&quot;"
+      "<":"&lt;",">":"&gt;","&":"&amp;","'":"&apos;",'"':"&quot;"
     }[c] || c));
   }
 
@@ -336,11 +342,9 @@
     catch(e){ return ""; }
   }
 
-  // ===== カテゴリ判定（ゲーム速報っぽく雑に分ける）=====
+  // ===== カテゴリ判定 =====
   function pickCategory(p){
     const t = (p.title || "") + " " + (p.source || "") + " " + (p.url || "");
-    const s = t.toLowerCase();
-
     if (t.includes("G1") || t.includes("Ｇ１") || t.includes("グレード1") || t.includes("グレード１")) return "G1";
 
     const raceWords = ["優勝","準優","決勝","準決","予選","ドリーム","レース","初日","2日目","3日目","最終日","フライング","出走","進入","展示","イン","スタート","節間"];
@@ -353,6 +357,16 @@
     if (topicWords.some(w => t.includes(w))) return "topic";
 
     return "other";
+  }
+
+  // ★追加：リンクを“確実に”開く
+  function openLink(url){
+    if (!url) return;
+    // まず確実に同一タブで開く（ブロックされない）
+    window.location.href = url;
+
+    // もし“別タブが良い”なら↓に切り替え（環境によってブロックされることあり）
+    // window.open(url, "_blank", "noopener,noreferrer");
   }
 
   // ===== 表示 =====
@@ -390,8 +404,19 @@
     const frag = document.createDocumentFragment();
 
     for (const p of items){
+      // ★ここが重要：カード全体をタップでリンクへ
       const card = document.createElement("article");
       card.className = "card";
+      card.setAttribute("role", "link");
+      card.setAttribute("tabindex", "0");
+
+      card.addEventListener("click", () => openLink(p.url));
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " "){
+          e.preventDefault();
+          openLink(p.url);
+        }
+      });
 
       const thumb = document.createElement("div");
       thumb.className = "thumb";
@@ -414,13 +439,7 @@
 
       const h = document.createElement("h2");
       h.className = "headline";
-
-      const a = document.createElement("a");
-      a.href = p.url;
-      a.target = "_blank";
-      a.rel = "noopener noreferrer";
-      a.textContent = p.title || "(タイトルなし)";
-      h.appendChild(a);
+      h.textContent = p.title || "(タイトルなし)"; // ★aタグやめた
 
       const row = document.createElement("div");
       row.className = "row";
@@ -478,7 +497,6 @@
       if (!res.ok) throw new Error("HTTP " + res.status);
       const data = await res.json();
 
-      // data: { updatedAt, posts: [...] } でも、配列だけでもOK
       let posts = [];
       let updatedAt = null;
 
@@ -489,7 +507,6 @@
         updatedAt = data.updatedAt || null;
       }
 
-      // 正規化
       ALL = posts.map(p => {
         const cat = p.category || pickCategory(p);
         return {
@@ -503,7 +520,7 @@
       }).sort((a,b) => new Date(b.date) - new Date(a.date));
 
       $("#updatedAt").textContent = updatedAt ? fmtDate(updatedAt) : (ALL[0]?.date ? fmtDate(ALL[0].date) : "-");
-      $("#statText").textContent = `表示中: ${Math.min(ALL.length, ALL.length)}件 / 全${ALL.length}件`;
+      $("#statText").textContent = `表示中: ${ALL.length}件 / 全${ALL.length}件`;
 
       render();
     }catch(err){
@@ -532,7 +549,6 @@
     });
   });
 
-  // 起動
   load();
 </script>
 </body>
