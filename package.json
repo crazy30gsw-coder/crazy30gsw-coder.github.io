@@ -1,6 +1,11 @@
 {
+  "name": "crazy30gsw-coder-site",
+  "private": true,
   "type": "module",
   "scripts": {
     "build": "node create-sites.mjs"
+  },
+  "dependencies": {
+    "rss-parser": "^3.13.0"
   }
 }
