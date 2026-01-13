@@ -1,46 +1,48 @@
-name: Update posts.json
+name: Update site (RSS -> posts.json)
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "*/30 * * * *"   # 30分ごと（GitHubの都合で多少ズレる）
-  push:
-    paths:
-      - feeds.json
-      - scripts/**
-      - package.json
+    - cron: "*/30 * * * *"  # 30分おき（あとで変更OK）
 
 permissions:
   contents: write
 
+concurrency:
+  group: update-site
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: "npm"
 
-      - name: Install
-        run: npm install
+      - name: Install deps
+        run: npm ci
 
-      - name: Build posts.json
-        run: npm run build
+      - name: Generate site files
+        run: node create-sites.mjs
 
       - name: Commit & Push if changed
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          if git diff --quiet; then
-            echo "No changes."
-            exit 0
+          git status --porcelain
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "auto: update posts"
+            git push
+          else
+            echo "No changes to commit"
           fi
-
-          git add posts.json
-          git commit -m "auto: update posts.json"
-          git push
