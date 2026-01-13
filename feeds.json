@@ -1,9 +1,6 @@
-{
-  "maxItems": 80,
-  "feeds": [
-    {
-      "name": "GoogleNews ボートレース",
-      "url": "https://news.google.com/rss/search?q=ボートレース&hl=ja&gl=JP&ceid=JP:ja"
-    }
-  ]
-}
+[
+  {
+    "url": "https://news.google.com/rss/search?q=ボートレース&hl=ja&gl=JP&ceid=JP:ja",
+    "category": "ボートレース"
+  }
+]
