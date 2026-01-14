@@ -1,227 +1,627 @@
+<!-- FILE: index.html -->
+<!-- ID: INDEX-20260115-A-FIX01 -->
 <!doctype html>
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>まとめ速報｜芸能・政治・話題ニュース</title>
-  <meta name="description" content="芸能ニュースを中心に、政治・話題の最新情報をまとめて速報表示します。" />
+  <title>まとめ速報（芸能・政治・話題）</title>
+  <meta name="description" content="RSSから自動更新 | 芸能・政治・話題ニュース" />
   <meta name="theme-color" content="#ff7a00" />
 
-  <!-- ✅ Google AdSense（審査用コード） -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3300575674917758"
-     crossorigin="anonymous"></script>
+  <!-- ===== AdSense（サイト所有権確認 & 自動広告） ===== -->
+  <!-- ID: ADSENSE-HEAD-CA-PUB-33000575674917758 -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-33000575674917758"
+          crossorigin="anonymous"></script>
 
   <style>
+    :root{
+      --bg:#f6f6f7;
+      --text:#111;
+      --muted:#666;
+      --line:#e9e9e9;
+      --chip:#ffffff;
+      --chipText:#111;
+      --brand:#ff7a00;
+      --brand2:#ffb000;
+      --link:#0b57d0;
+      --card:#fff;
+      --shadow: 0 10px 25px rgba(0,0,0,.06);
+      --radius:16px;
+      --max: 980px;
+    }
+    *{box-sizing:border-box}
     body{
       margin:0;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans JP",sans-serif;
-      background:#f5f5f5;
-      color:#111;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans JP", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+      background:var(--bg);
+      color:var(--text);
     }
+    a{color:var(--link); text-decoration:none}
+    a:hover{text-decoration:underline}
+
     header{
-      background:linear-gradient(135deg,#ff7a00,#ff9f1a);
+      position:sticky; top:0; z-index:10;
+      background: linear-gradient(180deg, rgba(255,122,0,.98), rgba(255,122,0,.92));
       color:#fff;
-      padding:16px;
+      border-bottom:1px solid rgba(255,255,255,.25);
     }
-    h1{
-      margin:0;
-      font-size:22px;
-      font-weight:900;
+    .wrap{max-width:var(--max); margin:0 auto; padding:14px 14px}
+    .top{
+      display:flex; align-items:center; gap:12px;
+    }
+    .logo{
+      width:44px; height:44px; border-radius:14px;
+      background: linear-gradient(135deg, #ffd46a, #fff3c4);
+      display:grid; place-items:center;
+      font-weight:1000; color:#111;
+      box-shadow: 0 10px 22px rgba(0,0,0,.12);
+      flex:0 0 auto;
+    }
+    .titlebox{line-height:1.15}
+    .title{
+      font-size:22px; font-weight:1000; letter-spacing:.02em;
     }
     .sub{
-      font-size:13px;
-      opacity:.9;
-      margin-top:4px;
+      margin-top:6px; color:rgba(255,255,255,.92); font-size:12px;
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
     }
-    .wrap{
-      max-width:980px;
-      margin:0 auto;
-      padding:12px;
+    .pill{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:7px 10px; border-radius:999px;
+      background:rgba(255,255,255,.18);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.22);
+      font-size:12px;
+      backdrop-filter: blur(6px);
     }
-    .filters{
-      display:flex;
-      gap:8px;
-      margin:12px 0;
-      flex-wrap:wrap;
+    .pill .dot{width:8px; height:8px; border-radius:999px; background:#fff}
+    .actions{margin-left:auto; display:flex; gap:8px; flex:0 0 auto}
+    button{
+      appearance:none; border:1px solid rgba(255,255,255,.25);
+      background:rgba(255,255,255,.18);
+      color:#fff;
+      padding:10px 12px; border-radius:12px;
+      font-weight:900; font-size:13px;
+      box-shadow: 0 10px 18px rgba(0,0,0,.12);
     }
-    .filter{
-      background:#fff;
+    button:active{transform: translateY(1px)}
+    .tools{
+      margin-top:12px;
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+    }
+    .search{
+      flex:1 1 320px;
+      display:flex; align-items:center; gap:10px;
+      border:1px solid rgba(255,255,255,.25);
+      border-radius:14px;
+      padding:10px 12px;
+      background:rgba(255,255,255,.15);
+      color:#fff;
+    }
+    .search input{
+      width:100%; border:0; outline:0;
+      font-size:14px;
+      background:transparent;
+      color:#fff;
+    }
+    .search input::placeholder{color:rgba(255,255,255,.85)}
+    .chips{
+      display:flex; gap:8px; flex-wrap:wrap;
+      align-items:center;
+    }
+    .chip{
+      border:1px solid rgba(255,255,255,.22);
+      background:rgba(255,255,255,.16);
+      padding:10px 14px;
       border-radius:999px;
-      padding:8px 14px;
       font-size:13px;
-      font-weight:700;
-      border:1px solid #ddd;
+      font-weight:1000;
+      color:#fff;
       cursor:pointer;
+      user-select:none;
     }
-    .filter.active{
+    .chip.active{
       background:#111;
       color:#fff;
       border-color:#111;
     }
-    .search{
-      width:100%;
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid #ddd;
-      margin-bottom:12px;
-      font-size:14px;
+
+    main{padding:16px 0 30px}
+    .meta{
+      display:flex; justify-content:space-between; align-items:center;
+      color:var(--muted);
+      font-size:12px;
+      padding:0 14px;
+      max-width:var(--max); margin:0 auto 10px;
+    }
+
+    /* ===== Ad block space ===== */
+    .adwrap{
+      max-width:var(--max);
+      margin:10px auto 12px;
+      padding:0 14px;
+    }
+    .adbox{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:14px;
+      box-shadow: var(--shadow);
+      padding:10px;
+      overflow:hidden;
+    }
+
+    .grid{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:0 14px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+    }
+    @media(min-width:780px){
+      .grid{grid-template-columns: 1fr 1fr}
     }
     .card{
-      background:#fff;
-      border-radius:14px;
-      padding:12px;
-      margin-bottom:12px;
-      box-shadow:0 4px 12px rgba(0,0,0,.06);
-    }
-    .time{
-      font-size:12px;
-      color:#ff7a00;
-      font-weight:800;
-    }
-    .title{
-      font-size:16px;
-      font-weight:900;
-      margin:6px 0;
-    }
-    .title a{
-      color:#0b57d0;
-      text-decoration:none;
-    }
-    .title a:hover{
-      text-decoration:underline;
-    }
-    .meta{
-      font-size:12px;
-      color:#666;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      overflow:hidden;
+      box-shadow: var(--shadow);
       display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      align-items:center;
+      min-height:128px;
     }
-    .tag{
-      background:#fff2e6;
-      border:1px solid #ffd1a3;
-      color:#a64b00;
+    .thumb{
+      width:140px;
+      background:#f2f2f2;
+      position:relative;
+      flex:0 0 140px;
+    }
+    .thumb img{
+      width:100%; height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .badge{
+      position:absolute; left:10px; top:10px;
+      background:rgba(17,17,17,.85);
+      color:#fff;
+      font-weight:1000;
+      padding:6px 10px;
       border-radius:999px;
-      padding:4px 10px;
-      font-weight:800;
-    }
-    footer{
       font-size:12px;
-      color:#666;
-      padding:20px 12px;
-      max-width:980px;
-      margin:0 auto;
+      backdrop-filter: blur(6px);
+    }
+    .body{
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      flex:1 1 auto;
+      min-width:0;
+    }
+    .headline{
+      font-size:15px;
+      font-weight:1000;
+      line-height:1.35;
+      margin:0;
+      display:-webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow:hidden;
+    }
+    .row{
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+      margin-top:auto;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .src{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:#fff;
+    }
+    .src b{color:#111}
+    .time{color:var(--muted)}
+    .tag{
+      display:inline-flex; align-items:center;
+      padding:6px 10px;
+      border-radius:999px;
+      background:#fff7ef;
+      border:1px solid #ffd7bb;
+      color:#7a2f00;
+      font-weight:1000;
+    }
+
+    .empty{
+      max-width:var(--max);
+      margin:20px auto;
+      padding:0 14px;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .footer{
+      max-width:var(--max);
+      margin:18px auto 0;
+      padding:0 14px;
+      color:var(--muted);
+      font-size:12px;
       line-height:1.6;
+    }
+    .tiny{
+      font-size:11px;
+      color:var(--muted);
     }
   </style>
 </head>
 
 <body>
-
 <header>
-  <h1>まとめ速報</h1>
-  <div class="sub">RSSから自動更新｜芸能・政治・話題ニュース</div>
+  <div class="wrap">
+    <div class="top">
+      <div class="logo">速</div>
+      <div class="titlebox">
+        <div class="title">まとめ速報</div>
+        <div class="sub">
+          <span class="pill"><span class="dot"></span><span id="statText">読み込み中…</span></span>
+          <span class="pill">更新: <span id="updatedAt">-</span></span>
+        </div>
+      </div>
+      <div class="actions">
+        <button id="reloadBtn" type="button">再読み込み</button>
+      </div>
+    </div>
+
+    <div class="tools">
+      <div class="search" role="search" aria-label="検索">
+        🔎
+        <input id="q" type="search" placeholder="検索（例：炎上、結婚、逮捕、総理、選挙…）" />
+      </div>
+
+      <div class="chips" aria-label="フィルター">
+        <div class="chip active" data-filter="all">全部</div>
+        <div class="chip" data-filter="ent">芸能</div>
+        <div class="chip" data-filter="scandal">スキャンダル</div>
+        <div class="chip" data-filter="politics">政治</div>
+        <div class="chip" data-filter="other">その他</div>
+      </div>
+    </div>
+  </div>
 </header>
 
-<div class="wrap">
-
-  <input id="search" class="search" type="search" placeholder="検索（例：炎上、結婚、政治、選挙）">
-
-  <div class="filters">
-    <div class="filter active" data-cat="all">全部</div>
-    <div class="filter" data-cat="ent">芸能</div>
-    <div class="filter" data-cat="pol">政治</div>
-    <div class="filter" data-cat="scandal">スキャンダル</div>
-    <div class="filter" data-cat="other">その他</div>
+<main>
+  <div class="meta">
+    <div>表示中: <b id="shown">0</b> 件 / 全 <b id="total">0</b> 件</div>
+    <div class="tiny" id="hint"></div>
   </div>
 
-  <div id="list"></div>
+  <!-- ===== AdSense 自動広告とは別に「広告枠」を置きたい場合のスペース ===== -->
+  <!-- ID: ADSENSE-BLOCK-TOP -->
+  <div class="adwrap">
+    <div class="adbox">
+      <!-- （審査中は出ないことがある。通れば表示される） -->
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-33000575674917758"
+           data-ad-slot="0000000000"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+        try{ (adsbygoogle = window.adsbygoogle || []).push({}); }catch(e){}
+      </script>
+      <div class="tiny" style="margin-top:6px;">※審査中/未配信の場合はここは空に見えます</div>
+    </div>
+  </div>
 
-</div>
+  <div class="grid" id="list"></div>
+  <div class="empty" id="empty" style="display:none;">該当する記事がありません。</div>
 
-<footer>
-  ※ 当サイトはRSS等から取得した情報を整理して表示しています。  
-  内容の詳細はリンク先の元記事をご確認ください。
-</footer>
+  <div class="footer">
+    <div>※ 当サイトはRSS等から取得した情報を整理して表示しています。内容の詳細はリンク先の元記事をご確認ください。</div>
+    <div class="tiny">画像は記事側のOGP画像が取得できるときだけ表示します（サイトによっては取得できません）。</div>
+  </div>
+</main>
 
 <script>
-const POSTS_URL = "./posts.json";
-let ALL = [];
-let current = "all";
+  // ===== 設定 =====
+  // ID: CONFIG-POSTS-URL
+  const POSTS_URL = "./posts.json";
 
-function categoryOf(p){
-  const t = (p.title||"");
-  if(t.match(/政治|首相|国会|選挙|政党/)) return "pol";
-  if(t.match(/不倫|逮捕|炎上|騒動|暴露/)) return "scandal";
-  if(t.match(/俳優|女優|芸能|ドラマ|映画|アイドル/)) return "ent";
-  return "other";
-}
-
-function render(){
-  const q = document.getElementById("search").value.toLowerCase();
-  const list = document.getElementById("list");
-  list.innerHTML = "";
-
-  ALL.filter(p=>{
-    if(current!=="all" && p.cat!==current) return false;
-    if(q && !p.title.toLowerCase().includes(q)) return false;
-    return true;
-  }).forEach(p=>{
-    const div = document.createElement("div");
-    div.className="card";
-    div.innerHTML = `
-      <div class="time">${p.ago}</div>
-      <div class="title">
-        <a href="${p.url}" target="_blank" rel="noopener">${p.title}</a>
-      </div>
-      <div class="meta">
-        <span class="tag">${p.label}</span>
-        <span>${p.source}</span>
-        <span>${p.date}</span>
-      </div>
-    `;
-    list.appendChild(div);
-  });
-}
-
-async function load(){
-  const res = await fetch(POSTS_URL+"?v="+Date.now());
-  const data = await res.json();
-
-  ALL = data.map(p=>{
-    const cat = categoryOf(p);
-    return {
-      title:p.title,
-      url:p.url,
-      source:p.source||"news",
-      date:p.date,
-      ago:p.ago||"",
-      cat,
-      label:{
-        ent:"芸能",
-        pol:"政治",
-        scandal:"スキャンダル",
-        other:"その他"
-      }[cat]
-    };
-  });
-
-  render();
-}
-
-document.getElementById("search").addEventListener("input",render);
-document.querySelectorAll(".filter").forEach(f=>{
-  f.onclick=()=>{
-    document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));
-    f.classList.add("active");
-    current=f.dataset.cat;
-    render();
+  // ===== プレースホルダー画像 =====
+  // ID: PLACEHOLDER-IMG
+  function escapeXml(s){
+    return String(s).replace(/[<>&'"]/g, c => ({
+      "<":"&lt;",">":"&gt;","&":"&amp;","'":"&apos;",'"':"&quot;"
+    }[c] || c));
+  }
+  const PLACEHOLDER_SVG = (title="NO IMAGE") => {
+    const safe = (title||"NO IMAGE").slice(0,26);
+    const svg =
+`<svg xmlns="http://www.w3.org/2000/svg" width="560" height="320">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f3f3f3"/>
+      <stop offset="1" stop-color="#e6e6e6"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#g)"/>
+  <rect x="26" y="26" width="508" height="268" rx="22" fill="#fff" stroke="#ddd"/>
+  <text x="50%" y="48%" font-size="34" text-anchor="middle" fill="#9a9a9a" font-family="system-ui, sans-serif" font-weight="800">${escapeXml(safe)}</text>
+  <text x="50%" y="62%" font-size="18" text-anchor="middle" fill="#b0b0b0" font-family="system-ui, sans-serif">OGP画像が取得できません</text>
+</svg>`;
+    return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
   };
-});
 
-load();
+  // ===== ユーティリティ =====
+  // ID: UTIL
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+  function fmtDate(iso){
+    try{
+      const d = new Date(iso);
+      const y = d.getFullYear();
+      const m = String(d.getMonth()+1).padStart(2,"0");
+      const day = String(d.getDate()).padStart(2,"0");
+      const hh = String(d.getHours()).padStart(2,"0");
+      const mm = String(d.getMinutes()).padStart(2,"0");
+      return `${y}/${m}/${day} ${hh}:${mm}`;
+    }catch(e){ return iso || "-"; }
+  }
+
+  function timeAgo(iso){
+    try{
+      const t = new Date(iso).getTime();
+      const diff = Date.now() - t;
+      const min = Math.floor(diff/60000);
+      if (min < 1) return "たった今";
+      if (min < 60) return `${min}分前`;
+      const h = Math.floor(min/60);
+      if (h < 24) return `${h}時間前`;
+      const d = Math.floor(h/24);
+      return `${d}日前`;
+    }catch(e){ return ""; }
+  }
+
+  function hostOf(url){
+    try{ return new URL(url).hostname.replace(/^www\./,""); }
+    catch(e){ return ""; }
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[c]));
+  }
+
+  // ===== カテゴリ判定 =====
+  // ID: CATEGORY-PICKER
+  function pickCategory(p){
+    const t = (p.title || "") + " " + (p.source || "") + " " + (p.url || "");
+    const s = t.toLowerCase();
+
+    // 政治
+    const politicsWords = ["内閣","首相","総理","官房","国会","選挙","与党","野党","大臣","政党","都知事","知事","市長","議員","政策","外交","防衛","財務省","法案"];
+    if (politicsWords.some(w => t.includes(w) || s.includes(w.toLowerCase()))) return "politics";
+
+    // スキャンダル/事件
+    const scandalWords = ["逮捕","不倫","離婚","暴行","薬物","覚醒剤","書類送検","炎上","訴訟","告訴","謝罪","違法","詐欺","不正","流出","騒動","トラブル","事故","死亡"];
+    if (scandalWords.some(w => t.includes(w) || s.includes(w.toLowerCase()))) return "scandal";
+
+    // 芸能
+    const entWords = ["芸能","俳優","女優","アイドル","タレント","ドラマ","映画","番組","テレビ","YouTube","TikTok","結婚","熱愛","グラビア","モデル","歌手","ライブ","写真集"];
+    if (entWords.some(w => t.includes(w) || s.includes(w.toLowerCase()))) return "ent";
+
+    return "other";
+  }
+
+  function labelOfCategory(cat){
+    switch(cat){
+      case "ent": return "芸能";
+      case "scandal": return "スキャンダル";
+      case "politics": return "政治";
+      default: return "その他";
+    }
+  }
+
+  // ===== 表示 =====
+  // ID: RENDER-STATE
+  let ALL = [];
+  let currentFilter = "all"; // ← ここが超重要（初期は必ずall）
+
+  function forceAllChipActive(){
+    // ID: FORCE-ALL-CHIP
+    currentFilter = "all";
+    $$(".chip").forEach(c => c.classList.remove("active"));
+    const allChip = document.querySelector('.chip[data-filter="all"]');
+    if (allChip) allChip.classList.add("active");
+  }
+
+  function render(){
+    // ID: RENDER-MAIN
+    const q = ($("#q").value || "").trim().toLowerCase();
+    const list = $("#list");
+    list.innerHTML = "";
+
+    // 防御：currentFilter が壊れてたらallに戻す
+    if (!["all","ent","scandal","politics","other"].includes(currentFilter)){
+      forceAllChipActive();
+    }
+
+    let items = ALL.slice();
+
+    if (currentFilter !== "all"){
+      items = items.filter(p => p.category === currentFilter);
+    }
+
+    if (q){
+      items = items.filter(p => {
+        const hay = ((p.title||"") + " " + (p.source||"") + " " + (p.url||"")).toLowerCase();
+        return hay.includes(q);
+      });
+    }
+
+    $("#shown").textContent = String(items.length);
+    $("#total").textContent = String(ALL.length);
+
+    if (!items.length){
+      $("#empty").style.display = "block";
+      return;
+    } else {
+      $("#empty").style.display = "none";
+    }
+
+    const frag = document.createDocumentFragment();
+
+    for (const p of items){
+      const card = document.createElement("article");
+      card.className = "card";
+
+      const thumb = document.createElement("div");
+      thumb.className = "thumb";
+
+      const img = document.createElement("img");
+      img.loading = "lazy";
+      img.alt = p.title || "";
+      img.src = p.image || PLACEHOLDER_SVG("NO IMAGE");
+      img.onerror = () => { img.src = PLACEHOLDER_SVG("NO IMAGE"); };
+
+      const badge = document.createElement("div");
+      badge.className = "badge";
+      badge.textContent = timeAgo(p.date);
+
+      thumb.appendChild(img);
+      thumb.appendChild(badge);
+
+      const body = document.createElement("div");
+      body.className = "body";
+
+      const h = document.createElement("h2");
+      h.className = "headline";
+
+      // ★リンクが戻る/開けない問題の対策：カード全体クリックでも開く
+      // ID: LINK-FIX
+      const a = document.createElement("a");
+      a.href = p.url;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.textContent = p.title || "(タイトルなし)";
+      a.addEventListener("click", (e) => {
+        // モバイルでのタップ取りこぼし防止（何もしない）
+      });
+      h.appendChild(a);
+
+      const row = document.createElement("div");
+      row.className = "row";
+
+      const tag = document.createElement("span");
+      tag.className = "tag";
+      tag.textContent = labelOfCategory(p.category);
+
+      const src = document.createElement("span");
+      src.className = "src";
+      src.innerHTML = `<b>●</b> ${escapeHtml(p.source || hostOf(p.url) || "source")}`;
+
+      const time = document.createElement("span");
+      time.className = "time";
+      time.textContent = fmtDate(p.date);
+
+      row.appendChild(tag);
+      row.appendChild(src);
+      row.appendChild(time);
+
+      body.appendChild(h);
+      body.appendChild(row);
+
+      card.appendChild(thumb);
+      card.appendChild(body);
+
+      // カード全体をタップで開く（a以外タップでもOK）
+      card.addEventListener("click", (ev) => {
+        // すでにaを押したなら二重で開かない
+        if (ev.target && ev.target.tagName && ev.target.tagName.toLowerCase() === "a") return;
+        window.open(p.url, "_blank", "noopener,noreferrer");
+      });
+
+      frag.appendChild(card);
+    }
+
+    list.appendChild(frag);
+  }
+
+  async function load(){
+    // ID: LOAD-POSTS
+    $("#hint").textContent = "";
+    $("#statText").textContent = "読み込み中…";
+
+    try{
+      const res = await fetch(POSTS_URL + "?v=" + Date.now(), { cache: "no-store" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+
+      let posts = [];
+      let updatedAt = null;
+
+      if (Array.isArray(data)){
+        posts = data;
+      } else {
+        posts = data.posts || [];
+        updatedAt = data.updatedAt || null;
+      }
+
+      ALL = posts.map(p => {
+        const cat = p.category || pickCategory(p);
+        return {
+          title: p.title || "",
+          url: p.url || p.link || "",
+          source: p.source || hostOf(p.url || p.link || "") || "",
+          date: p.date || p.published || p.pubDate || new Date().toISOString(),
+          image: p.image || p.ogImage || p.thumbnail || "",
+          category: cat
+        };
+      }).filter(p => !!p.url).sort((a,b) => new Date(b.date) - new Date(a.date));
+
+      $("#updatedAt").textContent = updatedAt ? fmtDate(updatedAt) : (ALL[0]?.date ? fmtDate(ALL[0].date) : "-");
+      $("#statText").textContent = `全${ALL.length}件`;
+
+      // ★ここが今回の「0件バグ」本丸：ロードの度に必ずallへ戻す
+      // ID: FIX-EMPTY-BUG
+      forceAllChipActive();
+
+      render();
+    }catch(err){
+      console.error(err);
+      $("#statText").textContent = "読み込み失敗";
+      $("#hint").textContent = "posts.json が見つからないか壊れてます";
+      $("#empty").style.display = "block";
+      $("#empty").textContent = "読み込み失敗: posts.json が見つからないか壊れてます";
+    }
+  }
+
+  // ===== イベント =====
+  // ID: EVENTS
+  $("#reloadBtn").addEventListener("click", () => {
+    forceAllChipActive();
+    $("#q").value = "";
+    load();
+  });
+  $("#q").addEventListener("input", () => render());
+
+  $$(".chip").forEach(ch => {
+    ch.addEventListener("click", () => {
+      $$(".chip").forEach(x => x.classList.remove("active"));
+      ch.classList.add("active");
+      const f = ch.getAttribute("data-filter");
+      currentFilter = ["all","ent","scandal","politics","other"].includes(f) ? f : "all";
+      render();
+    });
+  });
+
+  // 起動
+  // ID: BOOT
+  load();
 </script>
-
 </body>
 </html>
