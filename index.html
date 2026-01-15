@@ -1,11 +1,12 @@
 <!doctype html>
+<!-- ID: INDEX-JINLIKE-20260115-V1 -->
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>まとめ速報｜芸能・政治・話題ニュース</title>
-  <meta name="description" content="RSSから自動更新される芸能・政治・話題ニュースまとめサイト" />
-  <meta name="theme-color" content="#ff7a00" />
+  <title>まとめ速報｜芸能・政治・話題</title>
+  <meta name="description" content="芸能・政治・話題ニュースを見やすくまとめる速報サイト" />
+  <meta name="theme-color" content="#ffffff" />
 
   <!-- AdSense -->
   <!-- ID: ADSENSE-HEAD-CA-PUB-33000575674917758 -->
@@ -15,52 +16,198 @@
 
   <style>
     :root{
-      --brand:#ff7a00;
-      --bg:#f6f6f7;
-      --card:#fff;
+      --bg:#fff;
       --text:#111;
       --muted:#666;
-      --line:#e9e9e9;
-      --radius:16px;
+      --line:#e6e6e6;
+      --brand:#ff5a00;       /* 近い色味 */
+      --brand2:#111;
+      --card:#fff;
+      --shadow:0 10px 22px rgba(0,0,0,.06);
+      --radius:14px;
+      --max: 1100px;
+      --side: 320px;
+      --link:#0b57d0;
+      --tagbg:#fff3e6;
+      --tagbd:#ffd2a8;
+      --tagtx:#7a2f00;
     }
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans JP",sans-serif;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans JP", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
       background:var(--bg);
       color:var(--text);
     }
-    a{color:#0b57d0;text-decoration:none}
+    a{color:var(--link); text-decoration:none}
     a:hover{text-decoration:underline}
 
-    header{
-      background:linear-gradient(135deg,#ff8a00,#ff6a00);
+    /* ===== Top bar (jinっぽく細いヘッダー) ===== */
+    .topbar{
+      background:#111;
       color:#fff;
-      padding:16px;
+      font-size:12px;
     }
-    .wrap{max-width:980px;margin:0 auto}
+    .topbar .wrap{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:8px 12px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .topbar .mini a{color:#fff; opacity:.85; font-weight:800}
+    .topbar .mini a:hover{opacity:1; text-decoration:none}
+
+    /* ===== Header ===== */
+    header{
+      background:#fff;
+      border-bottom:2px solid var(--brand);
+      position:sticky;
+      top:0;
+      z-index:20;
+    }
+    header .wrap{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:12px 12px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .logo{
+      display:flex; align-items:center; gap:10px;
+      min-width:0;
+    }
+    .mark{
+      width:40px; height:40px;
+      border-radius:10px;
+      background: linear-gradient(135deg, #ff7a00, #ff3b00);
+      display:grid; place-items:center;
+      color:#fff;
+      font-weight:1000;
+      box-shadow:0 8px 18px rgba(255,90,0,.22);
+      flex:0 0 auto;
+    }
+    .titlebox{min-width:0}
     .title{
-      font-size:22px;
-      font-weight:900;
+      font-size:20px;
+      font-weight:1000;
+      letter-spacing:.02em;
+      line-height:1.1;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
     .sub{
-      font-size:13px;
-      opacity:.95;
       margin-top:4px;
-    }
-
-    .tools{
-      margin-top:12px;
+      color:var(--muted);
+      font-size:12px;
       display:flex;
       gap:10px;
       flex-wrap:wrap;
+      align-items:center;
     }
-    .search{
-      flex:1;
-      background:#fff;
-      border-radius:999px;
-      padding:10px 14px;
+    .pill{
+      display:inline-flex; align-items:center; gap:6px;
       border:1px solid var(--line);
+      background:#fafafa;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:900;
+      font-size:12px;
+    }
+    .dot{width:8px;height:8px;border-radius:999px;background:var(--brand)}
+    .actions{margin-left:auto; display:flex; gap:8px}
+    button{
+      appearance:none;
+      border:1px solid var(--line);
+      background:#fff;
+      color:#111;
+      padding:10px 12px;
+      border-radius:12px;
+      font-weight:900;
+      font-size:13px;
+      box-shadow:0 6px 14px rgba(0,0,0,.05);
+      cursor:pointer;
+    }
+    button:active{transform: translateY(1px)}
+
+    /* ===== Nav chips ===== */
+    .nav{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:0 12px 10px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .chip{
+      border:1px solid var(--line);
+      background:#fff;
+      padding:9px 12px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:1000;
+      cursor:pointer;
+      user-select:none;
+    }
+    .chip.active{
+      background:var(--brand2);
+      color:#fff;
+      border-color:var(--brand2);
+    }
+
+    /* ===== Layout ===== */
+    main{padding:12px 0 30px}
+    .layout{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:0 12px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+    }
+    @media(min-width:980px){
+      .layout{
+        grid-template-columns: 1fr var(--side);
+        align-items:start;
+      }
+    }
+
+    /* ===== Main list ===== */
+    .panel{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .panel-hd{
+      padding:12px 12px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      background:linear-gradient(180deg,#fff,#fafafa);
+    }
+    .panel-hd b{font-weight:1000}
+    .panel-hd small{color:var(--muted); font-weight:800}
+    .search{
+      margin-top:10px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 12px;
+      background:#fff;
+      width:100%;
     }
     .search input{
       width:100%;
@@ -69,192 +216,640 @@
       font-size:14px;
     }
 
-    .chips{
-      margin-top:12px;
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      padding:12px;
+    }
+
+    /* ===== Card (jin風: 画像小さめ＋見出し太め) ===== */
+    .card{
+      display:flex;
+      gap:12px;
+      padding:12px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#fff;
+      cursor:pointer;
+      transition: transform .05s ease;
+    }
+    .card:active{transform: translateY(1px)}
+    .thumb{
+      width:120px; height:78px;
+      border-radius:12px;
+      overflow:hidden;
+      background:#f2f2f2;
+      flex:0 0 auto;
+      position:relative;
+    }
+    .thumb img{
+      width:100%; height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .timebadge{
+      position:absolute;
+      left:8px; top:8px;
+      background:rgba(17,17,17,.82);
+      color:#fff;
+      padding:5px 8px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:1000;
+      backdrop-filter: blur(6px);
+    }
+    .body{min-width:0; flex:1}
+    .headline{
+      margin:0;
+      font-size:16px;
+      font-weight:1000;
+      line-height:1.28;
+      display:-webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow:hidden;
+    }
+    .headline a{color:#111}
+    .headline a:hover{color:#111; text-decoration:underline}
+    .meta{
+      margin-top:8px;
       display:flex;
       gap:8px;
       flex-wrap:wrap;
-    }
-    .chip{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:999px;
-      padding:8px 14px;
-      font-weight:800;
-      cursor:pointer;
-    }
-    .chip.active{
-      background:#111;
-      color:#fff;
-      border-color:#111;
-    }
-
-    main{padding:16px}
-    .grid{
-      max-width:980px;
-      margin:0 auto;
-      display:grid;
-      grid-template-columns:1fr;
-      gap:14px;
-    }
-    @media(min-width:768px){
-      .grid{grid-template-columns:1fr 1fr}
-    }
-
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      overflow:hidden;
-      display:flex;
-      box-shadow:0 10px 25px rgba(0,0,0,.06);
-    }
-    .thumb{
-      width:140px;
-      background:#ddd;
-      flex:0 0 140px;
-    }
-    .thumb img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-    }
-    .body{
-      padding:12px;
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-      flex:1;
-    }
-    .headline{
-      font-size:15px;
-      font-weight:900;
-      line-height:1.35;
-    }
-    .meta{
+      align-items:center;
       font-size:12px;
       color:var(--muted);
-      margin-top:auto;
+    }
+    .tag{
+      display:inline-flex; align-items:center;
+      padding:5px 10px;
+      border-radius:999px;
+      background:var(--tagbg);
+      border:1px solid var(--tagbd);
+      color:var(--tagtx);
+      font-weight:1000;
+    }
+    .src{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:5px 10px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid var(--line);
+      font-weight:900;
+      color:#111;
+    }
+    .src b{color:#111}
+    .empty{
+      padding:18px 12px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    /* ===== Sidebar ===== */
+    .side .panel + .panel{margin-top:14px}
+    .side .panel-hd{
+      background:#111;
+      color:#fff;
+      border-bottom:0;
+    }
+    .side .panel-hd small{color:rgba(255,255,255,.85)}
+    .side .box{
+      padding:10px 12px 12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .mini{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:10px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#fff;
+    }
+    .rank{
+      width:26px;height:26px;border-radius:10px;
+      background:#111;color:#fff;
+      display:grid;place-items:center;
+      font-weight:1000;
+      flex:0 0 auto;
+      font-size:13px;
+    }
+    .mini a{
+      color:#111;
+      font-weight:1000;
+      line-height:1.35;
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+    .mini .m{
+      margin-top:4px;
+      font-size:12px;
+      color:var(--muted);
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .adnote{
+      font-size:11px;
+      color:var(--muted);
+    }
+    .adframe{
+      border:1px dashed #ddd;
+      border-radius:14px;
+      padding:12px;
+      background:#fff;
+      text-align:center;
+      color:#999;
+      font-weight:1000;
+      font-size:12px;
+    }
+
+    /* ===== Footer ===== */
+    footer{
+      max-width:var(--max);
+      margin:18px auto 0;
+      padding:0 12px 26px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.7;
+    }
+    footer .footbox{
+      border-top:1px solid var(--line);
+      padding-top:14px;
       display:flex;
       gap:10px;
       flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
     }
-    .tag{
-      background:#fff3e6;
-      border:1px solid #ffd2a8;
-      color:#7a2f00;
-      padding:4px 10px;
-      border-radius:999px;
-      font-weight:800;
-    }
-
-    footer{
-      max-width:980px;
-      margin:24px auto 0;
-      padding:16px;
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.7;
-    }
-    footer a{color:#444}
+    footer a{color:#444; font-weight:1000}
   </style>
 </head>
 
 <body>
-<header>
-  <div class="wrap">
-    <div class="title">まとめ速報</div>
-    <div class="sub">RSSから自動更新｜芸能・政治・話題ニュース</div>
+  <!-- Top black bar -->
+  <div class="topbar">
+    <div class="wrap">
+      <div>最新まとめ｜芸能・政治・話題</div>
+      <div class="mini">
+        <a href="./privacy.html">プライバシー</a>
+        <span style="opacity:.5;margin:0 8px;">|</span>
+        <a href="./contact.html">お問い合わせ</a>
+      </div>
+    </div>
+  </div>
 
-    <div class="tools">
-      <div class="search">
-        🔍 <input id="q" placeholder="検索（例：炎上、結婚、政治、選挙）" />
+  <header>
+    <div class="wrap">
+      <div class="logo">
+        <div class="mark">速</div>
+        <div class="titlebox">
+          <div class="title">まとめ速報</div>
+          <div class="sub">
+            <span class="pill"><span class="dot"></span><span id="statText">読み込み中…</span></span>
+            <span class="pill">更新: <span id="updatedAt">-</span></span>
+            <span class="pill">全<span id="totalTop">0</span>件</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="reloadBtn" type="button">再読み込み</button>
       </div>
     </div>
 
-    <div class="chips">
-      <div class="chip active" data-filter="all">全部</div>
+    <div class="nav">
+      <div class="chip active" data-filter="all">トップ</div>
       <div class="chip" data-filter="芸能">芸能</div>
-      <div class="chip" data-filter="政治">政治</div>
       <div class="chip" data-filter="スキャンダル">スキャンダル</div>
+      <div class="chip" data-filter="政治">政治</div>
       <div class="chip" data-filter="その他">その他</div>
     </div>
-  </div>
-</header>
+  </header>
 
-<main>
-  <div class="grid" id="list"></div>
-</main>
+  <main>
+    <div class="layout">
+      <!-- Main -->
+      <section class="panel">
+        <div class="panel-hd">
+          <div><b>最新記事</b></div>
+          <small>表示: <b id="shown">0</b> / 全 <b id="total">0</b></small>
+        </div>
 
-<footer>
-  <div>
-    ※ 当サイトはRSS等から取得した情報を整理して表示しています。  
-    記事の詳細はリンク先の元記事をご確認ください。
-  </div>
+        <div style="padding:0 12px 12px;">
+          <div class="search" role="search" aria-label="検索">
+            🔎 <input id="q" type="search" placeholder="検索（例：炎上、結婚、逮捕、総理、選挙）" />
+          </div>
+        </div>
 
-  <!-- ★ ここが追加部分 -->
-  <!-- ID: FOOTER-LINKS-20260115 -->
-  <div style="margin-top:10px;">
-    <a href="./privacy.html">プライバシーポリシー</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="./contact.html">お問い合わせ</a>
-  </div>
-</footer>
+        <div class="list" id="list"></div>
+        <div class="empty" id="empty" style="display:none;">該当する記事がありません。</div>
+      </section>
+
+      <!-- Side -->
+      <aside class="side">
+        <section class="panel">
+          <div class="panel-hd">
+            <b>人気記事</b>
+            <small>クリック数</small>
+          </div>
+          <div class="box" id="popular"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-hd">
+            <b>関連記事</b>
+            <small>直近傾向</small>
+          </div>
+          <div class="box" id="related"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-hd">
+            <b>広告</b>
+            <small>AdSense</small>
+          </div>
+          <div class="box">
+            <div class="adnote">※ 審査通過後、自動広告が表示されます</div>
+            <div class="adframe">AdSense（自動広告）表示エリア</div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-hd">
+            <b>このサイトについて</b>
+            <small>注意</small>
+          </div>
+          <div class="box" style="color:var(--muted);font-size:12px;line-height:1.7;">
+            当サイトはRSS等から取得した情報を整理して表示しています。<br>
+            内容の詳細はリンク先の元記事をご確認ください。
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footbox">
+        <div>※ RSS等の情報を整理して表示しています（元記事参照）。</div>
+        <div>
+          <a href="./privacy.html">プライバシーポリシー</a>
+          <span style="margin:0 8px;">|</span>
+          <a href="./contact.html">お問い合わせ</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
 <script>
-const POSTS_URL = "./posts.json";
-let ALL = [];
-let filter = "all";
+  // =========================
+  // ID: CONFIG
+  // =========================
+  const POSTS_URL = "./posts.json";
+  const CLICK_KEY = "ms_clicks_v1";
+  const MAX_POPULAR = 8;
+  const MAX_RELATED = 8;
 
-function render(){
-  const q = document.getElementById("q").value.toLowerCase();
-  const list = document.getElementById("list");
-  list.innerHTML = "";
+  // =========================
+  // ID: UTIL
+  // =========================
+  const $ = (s)=>document.querySelector(s);
+  const $$ = (s)=>Array.from(document.querySelectorAll(s));
 
-  let items = ALL.filter(p=>{
-    if(filter!=="all" && p.category!==filter) return false;
-    if(q && !p.title.toLowerCase().includes(q)) return false;
-    return true;
-  });
+  function safeHost(url){
+    try{ return new URL(url).hostname.replace(/^www\./,''); }catch(e){ return ''; }
+  }
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[c]));
+  }
+  function fmtDate(iso){
+    try{
+      const d = new Date(iso);
+      const y=d.getFullYear();
+      const m=String(d.getMonth()+1).padStart(2,'0');
+      const day=String(d.getDate()).padStart(2,'0');
+      const hh=String(d.getHours()).padStart(2,'0');
+      const mm=String(d.getMinutes()).padStart(2,'0');
+      return `${y}/${m}/${day} ${hh}:${mm}`;
+    }catch(e){ return iso || "-"; }
+  }
+  function timeAgo(iso){
+    try{
+      const t=new Date(iso).getTime();
+      const diff=Date.now()-t;
+      const min=Math.floor(diff/60000);
+      if(min<1) return "たった今";
+      if(min<60) return `${min}分前`;
+      const h=Math.floor(min/60);
+      if(h<24) return `${h}時間前`;
+      const d=Math.floor(h/24);
+      return `${d}日前`;
+    }catch(e){ return ""; }
+  }
 
-  items.forEach(p=>{
-    const el = document.createElement("article");
-    el.className = "card";
-    el.innerHTML = `
-      <div class="thumb">
-        <img src="${p.image || 'https://via.placeholder.com/300x200?text=NO+IMAGE'}">
-      </div>
-      <div class="body">
-        <div class="headline">
-          <a href="${p.url}" target="_blank" rel="noopener">${p.title}</a>
+  function labelOfCategory(c){
+    if(c==="芸能") return "芸能";
+    if(c==="政治") return "政治";
+    if(c==="スキャンダル") return "スキャンダル";
+    return "その他";
+  }
+
+  function keywords(title){
+    const t=(title||"")
+      .replace(/[【】\[\]（）()「」『』、。・:：!?！？…]/g," ")
+      .replace(/\s+/g," ")
+      .trim();
+    const raw=t.split(" ").filter(Boolean);
+    const stop=new Set(["まとめ","速報","ニュース","芸能","政治","話題","動画","画像","最新","発表","報道"]);
+    return raw.map(x=>x.toLowerCase()).filter(x=>x.length>=2 && !stop.has(x));
+  }
+
+  // =========================
+  // ID: CLICK-TRACK
+  // =========================
+  function loadClicks(){
+    try{ return JSON.parse(localStorage.getItem(CLICK_KEY)||"{}"); }catch(e){ return {}; }
+  }
+  function saveClicks(obj){
+    try{ localStorage.setItem(CLICK_KEY, JSON.stringify(obj)); }catch(e){}
+  }
+  function addClick(url){
+    const c=loadClicks();
+    const k=url||"";
+    c[k]=(c[k]||0)+1;
+    saveClicks(c);
+  }
+
+  // =========================
+  // ID: STATE
+  // =========================
+  let ALL=[];
+  let filter="all";
+
+  // =========================
+  // ID: RENDER
+  // =========================
+  function buildCard(p){
+    const art=document.createElement("article");
+    art.className="card";
+
+    const thumb=document.createElement("div");
+    thumb.className="thumb";
+    const img=document.createElement("img");
+    img.loading="lazy";
+    img.src=p.image || "https://via.placeholder.com/560x320?text=NO+IMAGE";
+    img.alt=p.title || "";
+    img.onerror=()=>{ img.src="https://via.placeholder.com/560x320?text=NO+IMAGE"; };
+    const badge=document.createElement("div");
+    badge.className="timebadge";
+    badge.textContent=timeAgo(p.date);
+    thumb.appendChild(img);
+    thumb.appendChild(badge);
+
+    const body=document.createElement("div");
+    body.className="body";
+
+    const h=document.createElement("h2");
+    h.className="headline";
+
+    const a=document.createElement("a");
+    a.href=p.url;
+    a.target="_blank";
+    a.rel="noopener noreferrer";
+    a.textContent=p.title || "(タイトルなし)";
+    a.addEventListener("click", ()=>addClick(p.url));
+    h.appendChild(a);
+
+    const meta=document.createElement("div");
+    meta.className="meta";
+
+    const tag=document.createElement("span");
+    tag.className="tag";
+    tag.textContent=labelOfCategory(p.category);
+
+    const src=document.createElement("span");
+    src.className="src";
+    src.innerHTML=`<b>●</b> ${escapeHtml(p.source || safeHost(p.url) || "source")}`;
+
+    const t=document.createElement("span");
+    t.textContent=fmtDate(p.date);
+
+    meta.appendChild(tag);
+    meta.appendChild(src);
+    meta.appendChild(t);
+
+    body.appendChild(h);
+    body.appendChild(meta);
+
+    art.appendChild(thumb);
+    art.appendChild(body);
+
+    // カード全体クリックでも飛ぶ
+    art.addEventListener("click",(e)=>{
+      if(e.target && e.target.tagName==="A") return;
+      addClick(p.url);
+      window.open(p.url, "_blank", "noopener,noreferrer");
+    });
+
+    return art;
+  }
+
+  function render(){
+    const q = ($("#q").value||"").trim().toLowerCase();
+    const list=$("#list");
+    list.innerHTML="";
+
+    let items=ALL.slice();
+
+    if(filter!=="all"){
+      items=items.filter(p=>p.category===filter);
+    }
+    if(q){
+      items=items.filter(p=>{
+        const hay=((p.title||"")+" "+(p.source||"")+" "+(p.url||"")).toLowerCase();
+        return hay.includes(q);
+      });
+    }
+
+    $("#shown").textContent=String(items.length);
+    $("#total").textContent=String(ALL.length);
+    $("#totalTop").textContent=String(ALL.length);
+
+    if(!items.length){
+      $("#empty").style.display="block";
+      return;
+    }else{
+      $("#empty").style.display="none";
+    }
+
+    const frag=document.createDocumentFragment();
+    items.forEach(p=>frag.appendChild(buildCard(p)));
+    list.appendChild(frag);
+
+    renderPopular();
+    renderRelated();
+  }
+
+  // =========================
+  // ID: POPULAR
+  // =========================
+  function renderPopular(){
+    const box=$("#popular");
+    box.innerHTML="";
+    const clicks=loadClicks();
+
+    const scored=ALL
+      .map(p=>({p, score:(clicks[p.url]||0)}))
+      .sort((a,b)=>b.score-a.score);
+
+    const use = (scored[0]?.score>0)
+      ? scored.slice(0,MAX_POPULAR).map(x=>x.p)
+      : ALL.slice(0,MAX_POPULAR);
+
+    use.forEach((p,i)=>{
+      const row=document.createElement("div");
+      row.className="mini";
+      row.innerHTML=`
+        <div class="rank">${i+1}</div>
+        <div style="min-width:0">
+          <a href="${p.url}" target="_blank" rel="noopener noreferrer">${escapeHtml(p.title||"(タイトルなし)")}</a>
+          <div class="m">
+            <span class="tag">${labelOfCategory(p.category)}</span>
+            <span>${escapeHtml(p.source||safeHost(p.url)||"source")}</span>
+          </div>
         </div>
-        <div class="meta">
-          <span class="tag">${p.category}</span>
-          <span>${p.source}</span>
-          <span>${p.date}</span>
+      `;
+      row.querySelector("a").addEventListener("click", ()=>addClick(p.url));
+      box.appendChild(row);
+    });
+  }
+
+  // =========================
+  // ID: RELATED
+  // =========================
+  function renderRelated(){
+    const box=$("#related");
+    box.innerHTML="";
+
+    const recent=ALL.slice(0,10);
+    const pool=ALL.slice(0,60);
+
+    const freq=new Map();
+    recent.forEach(p=>{
+      keywords(p.title).forEach(k=>freq.set(k,(freq.get(k)||0)+1));
+    });
+    const topKeys=Array.from(freq.entries()).sort((a,b)=>b[1]-a[1]).slice(0,6).map(x=>x[0]);
+
+    const scored=pool.map(p=>{
+      const ks=keywords(p.title);
+      let s=0;
+      topKeys.forEach(k=>{ if(ks.includes(k)) s+=2; });
+      if(p.category==="芸能") s+=1;
+      return {p,s};
+    }).sort((a,b)=>b.s-a.s);
+
+    const use=(scored.filter(x=>x.s>0).slice(0,MAX_RELATED).map(x=>x.p));
+    const finalUse=use.length?use:ALL.slice(0,MAX_RELATED);
+
+    finalUse.forEach((p,i)=>{
+      const row=document.createElement("div");
+      row.className="mini";
+      row.innerHTML=`
+        <div class="rank">${i+1}</div>
+        <div style="min-width:0">
+          <a href="${p.url}" target="_blank" rel="noopener noreferrer">${escapeHtml(p.title||"(タイトルなし)")}</a>
+          <div class="m">
+            <span class="tag">${labelOfCategory(p.category)}</span>
+            <span>${escapeHtml(p.source||safeHost(p.url)||"source")}</span>
+          </div>
         </div>
-      </div>
-    `;
-    list.appendChild(el);
-  });
-}
+      `;
+      row.querySelector("a").addEventListener("click", ()=>addClick(p.url));
+      box.appendChild(row);
+    });
+  }
 
-fetch(POSTS_URL)
-  .then(r=>r.json())
-  .then(d=>{
-    ALL = d.posts || d;
-    render();
+  // =========================
+  // ID: LOAD
+  // =========================
+  async function load(){
+    $("#statText").textContent="読み込み中…";
+    try{
+      const res = await fetch(POSTS_URL + "?v=" + Date.now(), {cache:"no-store"});
+      if(!res.ok) throw new Error("HTTP "+res.status);
+      const data = await res.json();
+
+      let posts=[], updatedAt=null;
+      if(Array.isArray(data)){
+        posts=data;
+      }else{
+        posts=data.posts || [];
+        updatedAt=data.updatedAt || null;
+      }
+
+      ALL = posts.map(p=>{
+        const url = p.url || p.link || "";
+        return {
+          title: p.title || "",
+          url,
+          source: p.source || safeHost(url) || "",
+          date: p.date || p.published || p.pubDate || new Date().toISOString(),
+          image: p.image || p.ogImage || p.thumbnail || "",
+          category: p.category || "その他"
+        };
+      }).filter(p=>!!p.url).sort((a,b)=> new Date(b.date)-new Date(a.date));
+
+      $("#updatedAt").textContent = updatedAt ? fmtDate(updatedAt) : (ALL[0]?.date ? fmtDate(ALL[0].date) : "-");
+      $("#statText").textContent = "稼働中";
+      $("#totalTop").textContent = String(ALL.length);
+
+      // 初回は必ずトップ表示
+      filter="all";
+      $$(".chip").forEach(c=>c.classList.remove("active"));
+      document.querySelector('.chip[data-filter="all"]').classList.add("active");
+
+      render();
+    }catch(e){
+      console.error(e);
+      $("#statText").textContent="読み込み失敗";
+      $("#empty").style.display="block";
+      $("#empty").textContent="読み込み失敗: posts.json が見つからないか壊れてます";
+      $("#list").innerHTML="";
+      $("#popular").innerHTML="";
+      $("#related").innerHTML="";
+    }
+  }
+
+  // =========================
+  // ID: EVENTS
+  // =========================
+  $("#reloadBtn").addEventListener("click", ()=>{
+    $("#q").value="";
+    load();
   });
 
-document.getElementById("q").addEventListener("input",render);
-document.querySelectorAll(".chip").forEach(c=>{
-  c.onclick=()=>{
-    document.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));
-    c.classList.add("active");
-    filter=c.dataset.filter;
-    render();
-  };
-});
+  $("#q").addEventListener("input", render);
+
+  $$(".chip").forEach(ch=>{
+    ch.addEventListener("click", ()=>{
+      $$(".chip").forEach(x=>x.classList.remove("active"));
+      ch.classList.add("active");
+      filter = ch.getAttribute("data-filter") || "all";
+      render();
+    });
+  });
+
+  // BOOT
+  load();
 </script>
 </body>
 </html>
