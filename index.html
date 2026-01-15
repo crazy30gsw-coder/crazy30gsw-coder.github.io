@@ -1,11 +1,11 @@
 <!doctype html>
-<!-- ID: INDEX-JINLIKE-20260115-V1 -->
+<!-- ID: INDEX-JINLIKE-NEWS-THREADS-20260115-V2 -->
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>まとめ速報｜芸能・政治・話題</title>
-  <meta name="description" content="芸能・政治・話題ニュースを見やすくまとめる速報サイト" />
+  <meta name="description" content="芸能・政治・話題ニュース＋掲示板風まとめを見やすく整理" />
   <meta name="theme-color" content="#ffffff" />
 
   <!-- AdSense -->
@@ -20,17 +20,17 @@
       --text:#111;
       --muted:#666;
       --line:#e6e6e6;
-      --brand:#ff5a00;       /* 近い色味 */
+      --brand:#ff5a00;
       --brand2:#111;
-      --card:#fff;
       --shadow:0 10px 22px rgba(0,0,0,.06);
       --radius:14px;
       --max: 1100px;
-      --side: 320px;
+      --side: 340px;
       --link:#0b57d0;
       --tagbg:#fff3e6;
       --tagbd:#ffd2a8;
       --tagtx:#7a2f00;
+      --bbsbg:#f7f7f8;
     }
     *{box-sizing:border-box}
     body{
@@ -42,361 +42,248 @@
     a{color:var(--link); text-decoration:none}
     a:hover{text-decoration:underline}
 
-    /* ===== Top bar (jinっぽく細いヘッダー) ===== */
-    .topbar{
-      background:#111;
-      color:#fff;
-      font-size:12px;
-    }
+    /* topbar */
+    .topbar{background:#111;color:#fff;font-size:12px}
     .topbar .wrap{
-      max-width:var(--max);
-      margin:0 auto;
-      padding:8px 12px;
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:space-between;
+      max-width:var(--max);margin:0 auto;padding:8px 12px;
+      display:flex;gap:10px;align-items:center;justify-content:space-between;
     }
-    .topbar .mini a{color:#fff; opacity:.85; font-weight:800}
-    .topbar .mini a:hover{opacity:1; text-decoration:none}
+    .topbar .mini a{color:#fff;opacity:.85;font-weight:900}
+    .topbar .mini a:hover{opacity:1;text-decoration:none}
 
-    /* ===== Header ===== */
-    header{
-      background:#fff;
-      border-bottom:2px solid var(--brand);
-      position:sticky;
-      top:0;
-      z-index:20;
-    }
+    /* header */
+    header{background:#fff;border-bottom:2px solid var(--brand);position:sticky;top:0;z-index:20}
     header .wrap{
-      max-width:var(--max);
-      margin:0 auto;
-      padding:12px 12px;
-      display:flex;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
+      max-width:var(--max);margin:0 auto;padding:12px 12px;
+      display:flex;align-items:center;gap:12px;flex-wrap:wrap;
     }
-    .logo{
-      display:flex; align-items:center; gap:10px;
-      min-width:0;
-    }
+    .logo{display:flex;align-items:center;gap:10px;min-width:0}
     .mark{
-      width:40px; height:40px;
-      border-radius:10px;
-      background: linear-gradient(135deg, #ff7a00, #ff3b00);
-      display:grid; place-items:center;
-      color:#fff;
-      font-weight:1000;
-      box-shadow:0 8px 18px rgba(255,90,0,.22);
-      flex:0 0 auto;
+      width:40px;height:40px;border-radius:10px;
+      background:linear-gradient(135deg,#ff7a00,#ff3b00);
+      display:grid;place-items:center;color:#fff;font-weight:1000;
+      box-shadow:0 8px 18px rgba(255,90,0,.22);flex:0 0 auto;
     }
     .titlebox{min-width:0}
     .title{
-      font-size:20px;
-      font-weight:1000;
-      letter-spacing:.02em;
-      line-height:1.1;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
+      font-size:20px;font-weight:1000;letter-spacing:.02em;line-height:1.1;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
     }
     .sub{
-      margin-top:4px;
-      color:var(--muted);
-      font-size:12px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
+      margin-top:4px;color:var(--muted);font-size:12px;
+      display:flex;gap:10px;flex-wrap:wrap;align-items:center;
     }
     .pill{
-      display:inline-flex; align-items:center; gap:6px;
-      border:1px solid var(--line);
-      background:#fafafa;
-      padding:6px 10px;
-      border-radius:999px;
-      font-weight:900;
-      font-size:12px;
+      display:inline-flex;align-items:center;gap:6px;
+      border:1px solid var(--line);background:#fafafa;padding:6px 10px;
+      border-radius:999px;font-weight:1000;font-size:12px;
     }
     .dot{width:8px;height:8px;border-radius:999px;background:var(--brand)}
-    .actions{margin-left:auto; display:flex; gap:8px}
+    .actions{margin-left:auto;display:flex;gap:8px}
     button{
-      appearance:none;
-      border:1px solid var(--line);
-      background:#fff;
-      color:#111;
-      padding:10px 12px;
-      border-radius:12px;
-      font-weight:900;
-      font-size:13px;
-      box-shadow:0 6px 14px rgba(0,0,0,.05);
-      cursor:pointer;
+      appearance:none;border:1px solid var(--line);background:#fff;color:#111;
+      padding:10px 12px;border-radius:12px;font-weight:1000;font-size:13px;
+      box-shadow:0 6px 14px rgba(0,0,0,.05);cursor:pointer;
     }
-    button:active{transform: translateY(1px)}
+    button:active{transform:translateY(1px)}
 
-    /* ===== Nav chips ===== */
+    /* nav */
     .nav{
-      max-width:var(--max);
-      margin:0 auto;
-      padding:0 12px 10px;
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      align-items:center;
+      max-width:var(--max);margin:0 auto;padding:0 12px 10px;
+      display:flex;gap:8px;flex-wrap:wrap;align-items:center;
     }
     .chip{
-      border:1px solid var(--line);
-      background:#fff;
-      padding:9px 12px;
-      border-radius:999px;
-      font-size:13px;
-      font-weight:1000;
-      cursor:pointer;
-      user-select:none;
+      border:1px solid var(--line);background:#fff;
+      padding:9px 12px;border-radius:999px;font-size:13px;font-weight:1000;
+      cursor:pointer;user-select:none;
     }
-    .chip.active{
-      background:var(--brand2);
-      color:#fff;
-      border-color:var(--brand2);
-    }
+    .chip.active{background:var(--brand2);color:#fff;border-color:var(--brand2)}
 
-    /* ===== Layout ===== */
+    /* layout */
     main{padding:12px 0 30px}
     .layout{
-      max-width:var(--max);
-      margin:0 auto;
-      padding:0 12px;
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:14px;
+      max-width:var(--max);margin:0 auto;padding:0 12px;
+      display:grid;grid-template-columns:1fr;gap:14px;
     }
     @media(min-width:980px){
-      .layout{
-        grid-template-columns: 1fr var(--side);
-        align-items:start;
-      }
+      .layout{grid-template-columns: 1fr var(--side);align-items:start}
     }
 
-    /* ===== Main list ===== */
     .panel{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      overflow:hidden;
+      background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+      box-shadow:var(--shadow);overflow:hidden;
     }
     .panel-hd{
-      padding:12px 12px;
-      border-bottom:1px solid var(--line);
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:space-between;
-      flex-wrap:wrap;
-      background:linear-gradient(180deg,#fff,#fafafa);
+      padding:12px 12px;border-bottom:1px solid var(--line);
+      display:flex;gap:10px;align-items:center;justify-content:space-between;
+      flex-wrap:wrap;background:linear-gradient(180deg,#fff,#fafafa);
     }
     .panel-hd b{font-weight:1000}
-    .panel-hd small{color:var(--muted); font-weight:800}
+    .panel-hd small{color:var(--muted);font-weight:900}
+
     .search{
-      margin-top:10px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:10px 12px;
-      background:#fff;
-      width:100%;
+      margin:10px 12px 12px;
+      display:flex;align-items:center;gap:10px;
+      border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff;
     }
-    .search input{
-      width:100%;
-      border:0;
-      outline:0;
-      font-size:14px;
-    }
+    .search input{width:100%;border:0;outline:0;font-size:14px}
 
-    .list{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      padding:12px;
-    }
-
-    /* ===== Card (jin風: 画像小さめ＋見出し太め) ===== */
+    /* news list */
+    .list{display:flex;flex-direction:column;gap:10px;padding:12px}
     .card{
-      display:flex;
-      gap:12px;
-      padding:12px;
-      border:1px solid var(--line);
-      border-radius:14px;
-      background:#fff;
-      cursor:pointer;
-      transition: transform .05s ease;
+      display:flex;gap:12px;padding:12px;border:1px solid var(--line);
+      border-radius:14px;background:#fff;cursor:pointer;transition:transform .05s ease;
     }
-    .card:active{transform: translateY(1px)}
+    .card:active{transform:translateY(1px)}
     .thumb{
-      width:120px; height:78px;
-      border-radius:12px;
-      overflow:hidden;
-      background:#f2f2f2;
-      flex:0 0 auto;
-      position:relative;
+      width:120px;height:78px;border-radius:12px;overflow:hidden;background:#f2f2f2;
+      flex:0 0 auto;position:relative;
     }
-    .thumb img{
-      width:100%; height:100%;
-      object-fit:cover;
-      display:block;
-    }
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
     .timebadge{
-      position:absolute;
-      left:8px; top:8px;
-      background:rgba(17,17,17,.82);
-      color:#fff;
-      padding:5px 8px;
-      border-radius:999px;
-      font-size:11px;
-      font-weight:1000;
-      backdrop-filter: blur(6px);
+      position:absolute;left:8px;top:8px;background:rgba(17,17,17,.82);color:#fff;
+      padding:5px 8px;border-radius:999px;font-size:11px;font-weight:1000;
+      backdrop-filter:blur(6px);
     }
-    .body{min-width:0; flex:1}
+    .body{min-width:0;flex:1}
     .headline{
-      margin:0;
-      font-size:16px;
-      font-weight:1000;
-      line-height:1.28;
-      display:-webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow:hidden;
+      margin:0;font-size:16px;font-weight:1000;line-height:1.28;
+      display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
     }
     .headline a{color:#111}
-    .headline a:hover{color:#111; text-decoration:underline}
     .meta{
-      margin-top:8px;
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      align-items:center;
-      font-size:12px;
-      color:var(--muted);
+      margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+      font-size:12px;color:var(--muted);
     }
     .tag{
-      display:inline-flex; align-items:center;
-      padding:5px 10px;
-      border-radius:999px;
-      background:var(--tagbg);
-      border:1px solid var(--tagbd);
-      color:var(--tagtx);
-      font-weight:1000;
+      display:inline-flex;align-items:center;
+      padding:5px 10px;border-radius:999px;background:var(--tagbg);
+      border:1px solid var(--tagbd);color:var(--tagtx);font-weight:1000;
     }
     .src{
-      display:inline-flex; align-items:center; gap:6px;
-      padding:5px 10px;
-      border-radius:999px;
-      background:#fff;
-      border:1px solid var(--line);
-      font-weight:900;
-      color:#111;
+      display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;
+      background:#fff;border:1px solid var(--line);font-weight:900;color:#111;
     }
     .src b{color:#111}
-    .empty{
-      padding:18px 12px;
-      color:var(--muted);
-      font-size:14px;
-    }
+    .empty{padding:18px 12px;color:var(--muted);font-size:14px}
 
-    /* ===== Sidebar ===== */
+    /* sidebar */
     .side .panel + .panel{margin-top:14px}
-    .side .panel-hd{
-      background:#111;
-      color:#fff;
-      border-bottom:0;
-    }
+    .side .panel-hd{background:#111;color:#fff;border-bottom:0}
     .side .panel-hd small{color:rgba(255,255,255,.85)}
     .side .box{
-      padding:10px 12px 12px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
+      padding:10px 12px 12px;display:flex;flex-direction:column;gap:10px;
     }
     .mini{
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-      padding:10px;
-      border:1px solid var(--line);
-      border-radius:14px;
-      background:#fff;
+      display:flex;gap:10px;align-items:flex-start;padding:10px;
+      border:1px solid var(--line);border-radius:14px;background:#fff;
     }
     .rank{
-      width:26px;height:26px;border-radius:10px;
+      width:26px;height:26px;border-radius:10px;background:#111;color:#fff;
+      display:grid;place-items:center;font-weight:1000;flex:0 0 auto;font-size:13px;
+    }
+    .mini a{
+      color:#111;font-weight:1000;line-height:1.35;
+      display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+    }
+    .mini .m{
+      margin-top:4px;font-size:12px;color:var(--muted);
+      display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+    }
+    .adnote{font-size:11px;color:var(--muted)}
+    .adframe{
+      border:1px dashed #ddd;border-radius:14px;padding:12px;background:#fff;text-align:center;
+      color:#999;font-weight:1000;font-size:12px;
+    }
+
+    /* ===== BBS block (ここが追加) ===== */
+    .bbswrap{padding:12px}
+    .bbsbox{
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:var(--bbsbg);
+      overflow:hidden;
+    }
+    .bbshead{
+      padding:12px 12px;
+      background:#fff;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+    }
+    .bbshead b{font-weight:1000}
+    .bbshead small{color:var(--muted);font-weight:900}
+    .thread{
+      padding:12px;
+      display:flex;
+      gap:12px;
+      border-top:1px solid var(--line);
+      background:linear-gradient(180deg,#fff,#fbfbfb);
+      cursor:pointer;
+    }
+    .thread:first-child{border-top:0}
+    .hot{
+      width:44px;height:44px;border-radius:14px;
       background:#111;color:#fff;
       display:grid;place-items:center;
       font-weight:1000;
       flex:0 0 auto;
-      font-size:13px;
-    }
-    .mini a{
-      color:#111;
-      font-weight:1000;
-      line-height:1.35;
-      display:-webkit-box;
-      -webkit-line-clamp:2;
-      -webkit-box-orient:vertical;
-      overflow:hidden;
-    }
-    .mini .m{
-      margin-top:4px;
       font-size:12px;
-      color:var(--muted);
+    }
+    .tmeta{min-width:0;flex:1}
+    .ttitle{
+      font-size:15px;font-weight:1000;line-height:1.3;
+      display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+      margin:0;
+    }
+    .tinfo{
+      margin-top:6px;
+      display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+      font-size:12px;color:var(--muted);
+    }
+    .board{
+      display:inline-flex;align-items:center;
+      padding:4px 10px;border-radius:999px;
+      background:#fff;border:1px solid var(--line);
+      font-weight:900;color:#111;
+    }
+    .quotes{
+      margin-top:8px;
       display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      align-items:center;
+      flex-direction:column;
+      gap:6px;
     }
-    .adnote{
-      font-size:11px;
-      color:var(--muted);
-    }
-    .adframe{
-      border:1px dashed #ddd;
-      border-radius:14px;
-      padding:12px;
+    .quote{
       background:#fff;
-      text-align:center;
-      color:#999;
-      font-weight:1000;
-      font-size:12px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:8px 10px;
+      font-size:13px;
+      line-height:1.5;
+      color:#111;
     }
+    .qno{color:#999;font-weight:900;margin-right:6px}
+    .qlike{color:#999;font-size:12px;margin-left:6px}
 
-    /* ===== Footer ===== */
+    /* footer */
     footer{
-      max-width:var(--max);
-      margin:18px auto 0;
-      padding:0 12px 26px;
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.7;
+      max-width:var(--max);margin:18px auto 0;padding:0 12px 26px;
+      color:var(--muted);font-size:12px;line-height:1.7;
     }
     footer .footbox{
-      border-top:1px solid var(--line);
-      padding-top:14px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:space-between;
+      border-top:1px solid var(--line);padding-top:14px;
+      display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;
     }
-    footer a{color:#444; font-weight:1000}
+    footer a{color:#444;font-weight:1000}
   </style>
 </head>
 
 <body>
-  <!-- Top black bar -->
   <div class="topbar">
     <div class="wrap">
-      <div>最新まとめ｜芸能・政治・話題</div>
+      <div>最新まとめ｜ニュース＋掲示板風まとめ</div>
       <div class="mini">
         <a href="./privacy.html">プライバシー</a>
         <span style="opacity:.5;margin:0 8px;">|</span>
@@ -414,7 +301,8 @@
           <div class="sub">
             <span class="pill"><span class="dot"></span><span id="statText">読み込み中…</span></span>
             <span class="pill">更新: <span id="updatedAt">-</span></span>
-            <span class="pill">全<span id="totalTop">0</span>件</span>
+            <span class="pill">ニュース <span id="totalTop">0</span>件</span>
+            <span class="pill">掲示板 <span id="threadTop">0</span>件</span>
           </div>
         </div>
       </div>
@@ -442,14 +330,23 @@
           <small>表示: <b id="shown">0</b> / 全 <b id="total">0</b></small>
         </div>
 
-        <div style="padding:0 12px 12px;">
-          <div class="search" role="search" aria-label="検索">
-            🔎 <input id="q" type="search" placeholder="検索（例：炎上、結婚、逮捕、総理、選挙）" />
-          </div>
+        <div class="search" role="search" aria-label="検索">
+          🔎 <input id="q" type="search" placeholder="検索（例：炎上、結婚、逮捕、総理、選挙）" />
         </div>
 
         <div class="list" id="list"></div>
         <div class="empty" id="empty" style="display:none;">該当する記事がありません。</div>
+
+        <!-- ===== 掲示板まとめ枠（ここが追加） ===== -->
+        <div class="bbswrap">
+          <div class="bbsbox">
+            <div class="bbshead">
+              <b>掲示板まとめ</b>
+              <small>※ 短い引用＋リンク（転載しない）</small>
+            </div>
+            <div id="threads"></div>
+          </div>
+        </div>
       </section>
 
       <!-- Side -->
@@ -488,7 +385,7 @@
           </div>
           <div class="box" style="color:var(--muted);font-size:12px;line-height:1.7;">
             当サイトはRSS等から取得した情報を整理して表示しています。<br>
-            内容の詳細はリンク先の元記事をご確認ください。
+            掲示板まとめは短い引用＋リンク中心で、元ページをご確認ください。
           </div>
         </section>
       </aside>
@@ -513,6 +410,7 @@
   // ID: CONFIG
   // =========================
   const POSTS_URL = "./posts.json";
+  const THREADS_URL = "./threads.json";
   const CLICK_KEY = "ms_clicks_v1";
   const MAX_POPULAR = 8;
   const MAX_RELATED = 8;
@@ -593,10 +491,11 @@
   // ID: STATE
   // =========================
   let ALL=[];
+  let THREADS=[];
   let filter="all";
 
   // =========================
-  // ID: RENDER
+  // ID: NEWS RENDER
   // =========================
   function buildCard(p){
     const art=document.createElement("article");
@@ -620,7 +519,6 @@
 
     const h=document.createElement("h2");
     h.className="headline";
-
     const a=document.createElement("a");
     a.href=p.url;
     a.target="_blank";
@@ -653,7 +551,6 @@
     art.appendChild(thumb);
     art.appendChild(body);
 
-    // カード全体クリックでも飛ぶ
     art.addEventListener("click",(e)=>{
       if(e.target && e.target.tagName==="A") return;
       addClick(p.url);
@@ -669,10 +566,8 @@
     list.innerHTML="";
 
     let items=ALL.slice();
+    if(filter!=="all") items=items.filter(p=>p.category===filter);
 
-    if(filter!=="all"){
-      items=items.filter(p=>p.category===filter);
-    }
     if(q){
       items=items.filter(p=>{
         const hay=((p.title||"")+" "+(p.source||"")+" "+(p.url||"")).toLowerCase();
@@ -686,34 +581,28 @@
 
     if(!items.length){
       $("#empty").style.display="block";
-      return;
     }else{
       $("#empty").style.display="none";
+      const frag=document.createDocumentFragment();
+      items.forEach(p=>frag.appendChild(buildCard(p)));
+      list.appendChild(frag);
     }
-
-    const frag=document.createDocumentFragment();
-    items.forEach(p=>frag.appendChild(buildCard(p)));
-    list.appendChild(frag);
 
     renderPopular();
     renderRelated();
+    renderThreads();
   }
 
   // =========================
-  // ID: POPULAR
+  // ID: POPULAR / RELATED
   // =========================
   function renderPopular(){
     const box=$("#popular");
     box.innerHTML="";
     const clicks=loadClicks();
 
-    const scored=ALL
-      .map(p=>({p, score:(clicks[p.url]||0)}))
-      .sort((a,b)=>b.score-a.score);
-
-    const use = (scored[0]?.score>0)
-      ? scored.slice(0,MAX_POPULAR).map(x=>x.p)
-      : ALL.slice(0,MAX_POPULAR);
+    const scored=ALL.map(p=>({p, score:(clicks[p.url]||0)})).sort((a,b)=>b.score-a.score);
+    const use=(scored[0]?.score>0) ? scored.slice(0,MAX_POPULAR).map(x=>x.p) : ALL.slice(0,MAX_POPULAR);
 
     use.forEach((p,i)=>{
       const row=document.createElement("div");
@@ -733,32 +622,25 @@
     });
   }
 
-  // =========================
-  // ID: RELATED
-  // =========================
   function renderRelated(){
     const box=$("#related");
     box.innerHTML="";
-
     const recent=ALL.slice(0,10);
     const pool=ALL.slice(0,60);
 
     const freq=new Map();
-    recent.forEach(p=>{
-      keywords(p.title).forEach(k=>freq.set(k,(freq.get(k)||0)+1));
-    });
+    recent.forEach(p=>keywords(p.title).forEach(k=>freq.set(k,(freq.get(k)||0)+1)));
     const topKeys=Array.from(freq.entries()).sort((a,b)=>b[1]-a[1]).slice(0,6).map(x=>x[0]);
 
     const scored=pool.map(p=>{
       const ks=keywords(p.title);
-      let s=0;
-      topKeys.forEach(k=>{ if(ks.includes(k)) s+=2; });
+      let s=0; topKeys.forEach(k=>{ if(ks.includes(k)) s+=2; });
       if(p.category==="芸能") s+=1;
       return {p,s};
     }).sort((a,b)=>b.s-a.s);
 
-    const use=(scored.filter(x=>x.s>0).slice(0,MAX_RELATED).map(x=>x.p));
-    const finalUse=use.length?use:ALL.slice(0,MAX_RELATED);
+    const use = scored.filter(x=>x.s>0).slice(0,MAX_RELATED).map(x=>x.p);
+    const finalUse = use.length ? use : ALL.slice(0,MAX_RELATED);
 
     finalUse.forEach((p,i)=>{
       const row=document.createElement("div");
@@ -779,21 +661,84 @@
   }
 
   // =========================
+  // ID: THREADS (掲示板まとめ風)
+  // =========================
+  function renderThreads(){
+    const box = $("#threads");
+    box.innerHTML = "";
+
+    $("#threadTop").textContent = String(THREADS.length);
+
+    const frag = document.createDocumentFragment();
+    THREADS.slice(0, 8).forEach(th=>{
+      const row = document.createElement("div");
+      row.className = "thread";
+      row.addEventListener("click", ()=>{
+        // 掲示板まとめ側もクリック数に加算
+        addClick(th.url);
+        window.open(th.url, "_blank", "noopener,noreferrer");
+      });
+
+      const hot = document.createElement("div");
+      hot.className = "hot";
+      hot.textContent = "HOT\n" + String(th.hot ?? 0);
+
+      const meta = document.createElement("div");
+      meta.className = "tmeta";
+
+      const h = document.createElement("p");
+      h.className = "ttitle";
+      h.textContent = th.title || "(タイトルなし)";
+
+      const info = document.createElement("div");
+      info.className = "tinfo";
+      info.innerHTML = `
+        <span class="board">${escapeHtml(th.board || "掲示板")}</span>
+        <span>${fmtDate(th.date)}</span>
+        <span>${timeAgo(th.date)}</span>
+      `;
+
+      const quotes = document.createElement("div");
+      quotes.className = "quotes";
+
+      (th.posts || []).slice(0, 3).forEach(p=>{
+        const q = document.createElement("div");
+        q.className = "quote";
+        q.innerHTML = `<span class="qno">#${p.no ?? ""}</span>${escapeHtml(p.text || "")}
+          <span class="qlike">★${p.likes ?? 0}</span>`;
+        quotes.appendChild(q);
+      });
+
+      meta.appendChild(h);
+      meta.appendChild(info);
+      meta.appendChild(quotes);
+
+      row.appendChild(hot);
+      row.appendChild(meta);
+      frag.appendChild(row);
+    });
+
+    box.appendChild(frag);
+  }
+
+  // =========================
   // ID: LOAD
   // =========================
   async function load(){
     $("#statText").textContent="読み込み中…";
+
     try{
-      const res = await fetch(POSTS_URL + "?v=" + Date.now(), {cache:"no-store"});
-      if(!res.ok) throw new Error("HTTP "+res.status);
-      const data = await res.json();
+      // NEWS
+      const r1 = await fetch(POSTS_URL + "?v=" + Date.now(), {cache:"no-store"});
+      if(!r1.ok) throw new Error("posts.json HTTP " + r1.status);
+      const data1 = await r1.json();
 
       let posts=[], updatedAt=null;
-      if(Array.isArray(data)){
-        posts=data;
+      if(Array.isArray(data1)){
+        posts=data1;
       }else{
-        posts=data.posts || [];
-        updatedAt=data.updatedAt || null;
+        posts=data1.posts || [];
+        updatedAt=data1.updatedAt || null;
       }
 
       ALL = posts.map(p=>{
@@ -806,13 +751,30 @@
           image: p.image || p.ogImage || p.thumbnail || "",
           category: p.category || "その他"
         };
-      }).filter(p=>!!p.url).sort((a,b)=> new Date(b.date)-new Date(a.date));
+      }).filter(p=>!!p.url).sort((a,b)=>new Date(b.date)-new Date(a.date));
 
       $("#updatedAt").textContent = updatedAt ? fmtDate(updatedAt) : (ALL[0]?.date ? fmtDate(ALL[0].date) : "-");
-      $("#statText").textContent = "稼働中";
-      $("#totalTop").textContent = String(ALL.length);
 
-      // 初回は必ずトップ表示
+      // THREADS
+      try{
+        const r2 = await fetch(THREADS_URL + "?v=" + Date.now(), {cache:"no-store"});
+        if(!r2.ok) throw new Error("threads.json HTTP " + r2.status);
+        const data2 = await r2.json();
+        THREADS = (data2.threads || data2 || []).map(t=>({
+          title: t.title || "",
+          url: t.url || "",
+          board: t.board || "掲示板",
+          date: t.date || new Date().toISOString(),
+          hot: t.hot ?? 0,
+          posts: Array.isArray(t.posts) ? t.posts : []
+        })).filter(t=>!!t.url).sort((a,b)=>new Date(b.date)-new Date(a.date));
+      }catch(e){
+        THREADS = [];
+      }
+
+      $("#statText").textContent="稼働中";
+
+      // 初回はトップ
       filter="all";
       $$(".chip").forEach(c=>c.classList.remove("active"));
       document.querySelector('.chip[data-filter="all"]').classList.add("active");
@@ -821,11 +783,12 @@
     }catch(e){
       console.error(e);
       $("#statText").textContent="読み込み失敗";
-      $("#empty").style.display="block";
-      $("#empty").textContent="読み込み失敗: posts.json が見つからないか壊れてます";
       $("#list").innerHTML="";
       $("#popular").innerHTML="";
       $("#related").innerHTML="";
+      $("#threads").innerHTML="";
+      $("#empty").style.display="block";
+      $("#empty").textContent="読み込み失敗: posts.json が見つからないか壊れてます";
     }
   }
 
@@ -848,7 +811,6 @@
     });
   });
 
-  // BOOT
   load();
 </script>
 </body>
