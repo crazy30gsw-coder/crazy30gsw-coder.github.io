@@ -3,7 +3,7 @@ name: Build threads.json
 on:
   workflow_dispatch:
   schedule:
-    - cron: "20 */6 * * *"  # 6時間おき（好みでOK）
+    - cron: "20 */6 * * *"
 
 permissions:
   contents: write
@@ -12,29 +12,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: "20"
 
-      - name: Install deps
-        run: |
-          npm install
-
-      - name: Build threads.json
+      - name: Build threads
         env:
           KKK: ${{ secrets.KKK }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           node tools/build_threads.mjs
 
-      - name: Commit changes
+      - name: Commit
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.email "github-actions@users.noreply.github.com"
           git add threads.json
-          git commit -m "Update threads.json" || echo "No changes"
+          git commit -m "update threads.json" || echo "no change"
           git push
