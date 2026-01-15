@@ -1,18 +1,25 @@
-import fs from "fs";
-import path from "path";
-import fetch from "node-fetch";
+/**
+ * tools/build_threads.mjs
+ * Node.js v20+ 対応（node-fetch 不要）
+ */
 
+import fs from "fs";
+
+// ========= 設定 =========
 const API_KEY = process.env.OPENAI_API_KEY || process.env.KKK;
-if (!API_KEY) throw new Error("OpenAI API key (OPENAI_API_KEY or KKK) が設定されていません");
+if (!API_KEY) {
+  throw new Error("❌ OpenAI APIキーが設定されていません（OPENAI_API_KEY or KKK）");
+}
 
 const POSTS_PATH = "./posts.json";
 const THREADS_PATH = "./threads.json";
 
-function readJsonSafe(p, fallback) {
+// ========= ユーティリティ =========
+function readJsonSafe(path, fallback) {
   try {
-    if (!fs.existsSync(p)) return fallback;
-    return JSON.parse(fs.readFileSync(p, "utf8"));
-  } catch (e) {
+    if (!fs.existsSync(path)) return fallback;
+    return JSON.parse(fs.readFileSync(path, "utf8"));
+  } catch {
     return fallback;
   }
 }
@@ -23,7 +30,6 @@ function normalizePosts(data) {
     .map(p => ({
       title: p.title || "",
       url: p.url || p.link || "",
-      source: p.source || "",
       date: p.date || p.published || p.pubDate || new Date().toISOString(),
       category: p.category || "その他"
     }))
@@ -31,120 +37,114 @@ function normalizePosts(data) {
     .sort((a,b)=> new Date(b.date) - new Date(a.date));
 }
 
-function clamp(s, n) {
-  const t = String(s || "");
-  return t.length > n ? t.slice(0, n - 1) + "…" : t;
+function short(s, n=60) {
+  return s.length > n ? s.slice(0, n-1) + "…" : s;
 }
 
-async function genThreadForPost(post) {
-  // 重要：実在コメントの取得/転載はしない。あくまで “反応例” を生成する。
+// ========= OpenAI 呼び出し =========
+async function generateThread(post) {
   const prompt = `
-あなたは日本のまとめサイト編集者。
-次の「ニュース1本」から、掲示板風の「反応例（架空コメント）」を作ってください。
-※実在のコメントや他サイトの文章をコピーしない。固有表現の作り話もしない（事実断定・誹謗中傷・名誉毀損NG）。
-※短く、テンポ良く。口調は「ネットの反応っぽい」程度に。
+あなたは日本のまとめサイト編集者です。
+以下のニュースから「2ちゃんねる風の反応（架空）」を作ってください。
+
+【重要ルール】
+・実在の掲示板コメントを転載しない
+・誹謗中傷、断定的事実、名誉毀損は禁止
+・あくまで「ネットの反応っぽい例」
 
 【ニュース】
-タイトル: ${post.title}
-カテゴリ: ${post.category}
-ソースURL: ${post.url}
+タイトル：${post.title}
+カテゴリ：${post.category}
 
-出力は必ずJSONのみ：
+JSONのみで出力：
 {
-  "board": "芸能/政治/話題/社会/スポーツ/その他 のどれか",
-  "hot": 0〜100の整数,
+  "board": "芸能/政治/話題/社会/スポーツ/その他",
+  "hot": 0〜100,
   "posts": [
-    {"no": 1, "text": "コメント", "likes": 0〜50},
-    {"no": 2, "text": "コメント", "likes": 0〜50},
-    {"no": 3, "text": "コメント", "likes": 0〜50}
+    {"no":1,"text":"コメント","likes":0},
+    {"no":2,"text":"コメント","likes":0},
+    {"no":3,"text":"コメント","likes":0}
   ]
 }
-`.trim();
+`;
 
   const res = await fetch("https://api.openai.com/v1/responses", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${API_KEY}`,
+      "Authorization": `Bearer ${API_KEY}`
     },
     body: JSON.stringify({
       model: "gpt-4.1-mini",
       input: prompt,
-      max_output_tokens: 500,
-    }),
+      max_output_tokens: 500
+    })
   });
 
   if (!res.ok) {
-    const text = await res.text();
-    throw new Error("OpenAI API error: " + text);
+    const t = await res.text();
+    throw new Error("OpenAI API Error: " + t);
   }
 
-  const data = await res.json();
+  const json = await res.json();
+  let out = {};
 
-  // data.output_text に JSON が入る想定（あなたの今のコードと同じ扱い）
-  let obj = {};
   try {
-    obj = JSON.parse(data.output_text || "{}");
-  } catch (e) {
-    obj = {};
+    out = JSON.parse(json.output_text);
+  } catch {
+    out = {};
   }
 
-  const board = obj.board || (post.category === "芸能" ? "芸能" : post.category === "政治" ? "政治" : "話題");
-  const hot = Number.isFinite(obj.hot) ? obj.hot : Math.floor(40 + Math.random() * 50);
-
-  const posts = Array.isArray(obj.posts) ? obj.posts : [];
-  const fixed = posts.slice(0,3).map((p,i)=>({
+  const posts = (out.posts || []).slice(0,3).map((p,i)=>({
     no: i+1,
-    text: clamp(p?.text || "", 60) || "（反応例）",
+    text: short(p?.text || "反応あり"),
     likes: Number.isFinite(p?.likes) ? p.likes : Math.floor(Math.random()*20)
   }));
 
-  while (fixed.length < 3) {
-    fixed.push({ no: fixed.length+1, text: "（反応例）", likes: Math.floor(Math.random()*20) });
+  while (posts.length < 3) {
+    posts.push({ no: posts.length+1, text: "反応あり", likes: Math.floor(Math.random()*20) });
   }
 
   return {
     title: `【反応】${post.title}`,
     url: post.url,
-    board,
+    board: out.board || post.category || "話題",
     date: post.date,
-    hot: Math.max(0, Math.min(100, parseInt(hot, 10) || 50)),
-    posts: fixed
+    hot: Number.isFinite(out.hot) ? out.hot : Math.floor(40 + Math.random()*40),
+    posts
   };
 }
 
+// ========= メイン処理 =========
 async function main() {
   const raw = readJsonSafe(POSTS_PATH, { posts: [] });
   const posts = normalizePosts(raw);
 
   if (!posts.length) {
-    const out = { updatedAt: new Date().toISOString(), threads: [] };
-    fs.writeFileSync(THREADS_PATH, JSON.stringify(out, null, 2));
-    console.log("posts.json が空なので threads.json を空で更新しました");
+    fs.writeFileSync(THREADS_PATH, JSON.stringify({ updatedAt: new Date().toISOString(), threads: [] }, null, 2));
+    console.log("⚠ posts.json が空です");
     return;
   }
 
-  // 直近の上位ニュースから threads を作る（多すぎるとAPIコスト増）
-  const target = posts.slice(0, 8);
-
+  const targets = posts.slice(0, 8);
   const threads = [];
-  for (const p of target) {
-    console.log("Generate thread:", p.title);
-    const th = await genThreadForPost(p);
-    threads.push(th);
+
+  for (const p of targets) {
+    console.log("▶ 生成中:", p.title);
+    threads.push(await generateThread(p));
   }
 
   const out = {
     updatedAt: new Date().toISOString(),
-    note: "このthreadsはニュースから生成した『反応例（架空コメント）』です。実在の掲示板コメント転載ではありません。",
+    notice: "※本ページの反応はニュースから生成した架空コメントです",
     threads
   };
 
   fs.writeFileSync(THREADS_PATH, JSON.stringify(out, null, 2));
-  console.log("✅ threads.json を更新しました:", threads.length, "件");
+  console.log("✅ threads.json 更新完了:", threads.length);
 }
 
-main().catch(e => {
-  console.error("❌ Error:", e);
+main().catch(e=>{
+  console.error("❌ Build失敗", e);
   process.exit(1);
 });
