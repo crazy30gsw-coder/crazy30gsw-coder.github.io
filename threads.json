@@ -3,7 +3,7 @@
   "threads": [
     {
       "title": "【速報】芸能人の電撃結婚、ネット民の反応まとめ",
-      "url": "https://example.com/thread1",
+      "url": <a href="./thread.html?id=t001">
       "board": "芸スポ",
       "date": "2026-01-15T09:40:00+09:00",
       "hot": 92,
@@ -15,7 +15,7 @@
     },
     {
       "title": "【議論】政治資金問題、結局どうなるの？",
-      "url": "https://example.com/thread2",
+      "url": "<a href="./thread.html?id=t001">
       "board": "政治",
       "date": "2026-01-15T09:10:00+09:00",
       "hot": 65,
