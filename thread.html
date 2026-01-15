@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>スレッド表示</title>
+  <style>
+    body{margin:0;font-family:system-ui;background:#f6f6f6}
+    header{background:#ff6a00;color:#fff;padding:12px;font-weight:900}
+    main{max-width:720px;margin:0 auto;padding:12px}
+    .title{font-size:20px;font-weight:900;margin-bottom:6px}
+    .meta{color:#666;font-size:12px;margin-bottom:12px}
+    .res{background:#fff;border-radius:8px;padding:10px;margin-bottom:8px}
+    .no{font-weight:900;margin-right:6px}
+    .likes{color:#ff6a00;font-size:12px;margin-left:6px}
+    a.back{display:inline-block;margin-top:16px;color:#0b57d0}
+  </style>
+</head>
+<body>
+
+<header>まとめ速報</header>
+
+<main>
+  <div id="content">読み込み中…</div>
+  <a class="back" href="./index.html">← 一覧に戻る</a>
+</main>
+
+<script>
+const params = new URLSearchParams(location.search);
+const id = params.get("id");
+
+async function load(){
+  const res = await fetch("./threads.json?"+Date.now());
+  const data = await res.json();
+  const thread = data.threads.find(t => t.id === id);
+
+  if (!thread){
+    document.getElementById("content").textContent = "スレが見つかりません";
+    return;
+  }
+
+  const el = document.getElementById("content");
+  el.innerHTML = `
+    <div class="title">${thread.title}</div>
+    <div class="meta">${thread.board}｜🔥${thread.hot}</div>
+    ${thread.posts.map(p=>`
+      <div class="res">
+        <span class="no">${p.no}</span>${p.text}
+        <span class="likes">👍${p.likes}</span>
+      </div>
+    `).join("")}
+  `;
+}
+
+load();
+</script>
+</body>
+</html>
